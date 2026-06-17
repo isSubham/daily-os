@@ -1,131 +1,29 @@
-/* ==========================================================
-   DAILY OPERATING SYSTEM
-   app.js
-========================================================== */
+/*==========================================================
+    DAILY OPERATING SYSTEM
+    app.js — Main entry point
+==========================================================*/
 
-document.addEventListener("DOMContentLoaded", () => {
+import { startClock }                                        from './js/clock.js';
+import { initNav }                                           from './js/nav.js';
+import { highlightCurrentBlock, highlightTodayStudy, updateProgress } from './js/highlights.js';
 
-    const buttons = document.querySelectorAll(".day-btn");
-    const panels = document.querySelectorAll(".day-panel");
+document.addEventListener('DOMContentLoaded', () => {
 
-    function showPanel(day) {
+    // 1. Start live clock in the hero
+    startClock();
 
-        buttons.forEach(button => {
-            button.classList.remove("active");
+    // 2. Wire up day navigation (also shows today's panel)
+    initNav();
 
-            if (button.dataset.day === day) {
-                button.classList.add("active");
-            }
-        });
+    // 3. Highlight current time block and study row
+    highlightCurrentBlock();
+    highlightTodayStudy();
+    updateProgress();
 
-        panels.forEach(panel => {
-
-            panel.classList.remove("active");
-
-            if (panel.id === day) {
-
-                panel.classList.add("active");
-
-                panel.animate(
-                    [
-                        {
-                            opacity: 0,
-                            transform: "translateY(20px)"
-                        },
-                        {
-                            opacity: 1,
-                            transform: "translateY(0)"
-                        }
-                    ],
-                    {
-                        duration: 300,
-                        easing: "ease-out"
-                    }
-                );
-
-            }
-
-        });
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-
-    }
-
-    buttons.forEach(button => {
-
-        button.addEventListener("click", () => {
-
-            showPanel(button.dataset.day);
-
-        });
-
-    });
-
-    /* ==========================================
-       AUTO SELECT TODAY
-    ========================================== */
-
-    const today = new Date().getDay();
-
-    /*
-        Sunday = 0
-        Monday = 1
-        Tuesday = 2
-        Wednesday = 3
-        Thursday = 4
-        Friday = 5
-        Saturday = 6
-    */
-
-    if (today === 1 || today === 3 || today === 5) {
-
-        showPanel("mwf");
-
-    } else if (today === 2 || today === 4) {
-
-        showPanel("tt");
-
-    } else if (today === 6) {
-
-        showPanel("sat");
-
-    } else {
-
-        showPanel("sun");
-
-    }
-
-    /* ==========================================
-       KEYBOARD SHORTCUTS
-    ========================================== */
-
-    document.addEventListener("keydown", (event) => {
-
-        switch (event.key) {
-
-            case "1":
-                showPanel("mwf");
-                break;
-
-            case "2":
-                showPanel("tt");
-                break;
-
-            case "3":
-                showPanel("sat");
-                break;
-
-            case "4":
-                showPanel("sun");
-                break;
-
-            default:
-                break;
-        }
-
-    });
+    // Refresh highlights every minute
+    setInterval(() => {
+        highlightCurrentBlock();
+        updateProgress();
+    }, 60_000);
 
 });

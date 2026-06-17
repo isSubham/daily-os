@@ -1,0 +1,270 @@
+/*==========================================================
+    DAILY OPERATING SYSTEM
+    css/sidebar.css — Control Center Widgets
+==========================================================*/
+
+
+/* ─── SIDEBAR CONTAINER ──────────────────────────────────── */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+/* ─── SIDEBAR CARD (base) ────────────────────────────────── */
+
+.sidebar-card {
+    position: relative;
+    flex-shrink: 0;           /* never shrink — let sidebar scroll instead */
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 20px;
+    overflow: hidden;
+    transition:
+        transform var(--t-base) var(--ease),
+        border-color var(--t-base) var(--ease),
+        box-shadow var(--t-base) var(--ease);
+}
+
+/* top shimmer line */
+.sidebar-card::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+}
+
+.sidebar-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border2);
+    box-shadow: var(--shadow-md);
+}
+
+.sidebar-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: .92rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: var(--text);
+    margin-bottom: 16px;
+}
+
+.sidebar-title__icon {
+    font-size: 1rem;
+}
+
+
+/* ─── PROGRESS WIDGET (Today's Blocks) ───────────────────── */
+
+.progress-card {}
+
+.progress-bar-wrap {
+    background: var(--surface2);
+    border-radius: 999px;
+    height: 6px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--blue), var(--purple));
+    transition: width .6s var(--ease);
+}
+
+.progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: .75rem;
+    color: var(--muted);
+}
+
+.progress-stat {
+    font-weight: 700;
+    color: var(--blue);
+}
+
+
+/* ─── WEEKLY STUDY GRID ──────────────────────────────────── */
+
+.study-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.study-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: var(--r-sm);
+    background: var(--surface2);
+    border: 1px solid transparent;
+    cursor: default;
+    transition:
+        background var(--t-base) var(--ease),
+        border-color var(--t-base) var(--ease),
+        transform var(--t-base) var(--ease);
+}
+
+.study-item.is-today {
+    background: var(--surface3);
+    border-color: var(--border2);
+}
+
+.study-item:hover {
+    background: var(--surface3);
+    transform: translateX(3px);
+}
+
+.study-item__day {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: var(--muted);
+    width: 40px;
+    text-transform: uppercase;
+}
+
+.study-item.is-today .study-item__day {
+    color: var(--text);
+}
+
+.topic {
+    padding: 4px 11px;
+    border-radius: 999px;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+}
+
+.topic.dsa  { background: var(--purple-dim); color: #c8afff; border: 1px solid rgba(167,139,250,.2); }
+.topic.node { background: var(--blue-dim);   color: #8fc2ff; border: 1px solid rgba(79,156,255,.2); }
+.topic.free { background: var(--green-dim);  color: #90ffb5; border: 1px solid rgba(34,214,120,.2); }
+
+
+/* ─── DAILY HABITS ───────────────────────────────────────── */
+
+.habit-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.habit-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 13px;
+    border-radius: 999px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-size: .8rem;
+    font-weight: 500;
+    cursor: default;
+    user-select: none;
+    transition:
+        background var(--t-base) var(--ease),
+        border-color var(--t-base) var(--ease),
+        color var(--t-base) var(--ease),
+        transform var(--t-base) var(--ease),
+        box-shadow var(--t-base) var(--ease);
+}
+
+.habit-pill:hover {
+    background: rgba(34,214,120,.1);
+    border-color: rgba(34,214,120,.35);
+    color: var(--text);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(34,214,120,.12);
+}
+
+
+/* ─── CORE RULES ─────────────────────────────────────────── */
+
+.rule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rule-card {
+    padding: 13px 14px 13px 16px;
+    border-radius: var(--r-sm);
+    border-left: 3px solid var(--red);
+    background: rgba(245,101,101,.05);
+    border-top: 1px solid rgba(245,101,101,.08);
+    border-right: 1px solid rgba(245,101,101,.05);
+    border-bottom: 1px solid rgba(245,101,101,.05);
+    transition:
+        transform var(--t-base) var(--ease),
+        background var(--t-base) var(--ease);
+}
+
+.rule-card:hover {
+    transform: translateX(5px);
+    background: rgba(245,101,101,.09);
+}
+
+.rule-card h4 {
+    color: #ffa8a8;
+    font-size: .86rem;
+    margin-bottom: 3px;
+}
+
+.rule-card p {
+    color: var(--muted);
+    font-size: .78rem;
+    line-height: 1.45;
+}
+
+
+/* ─── QUOTE CARD ─────────────────────────────────────────── */
+
+.quote-card {
+    text-align: center;
+    background:
+        linear-gradient(135deg, rgba(79,156,255,.06) 0%, rgba(167,139,250,.06) 100%),
+        var(--surface);
+    border-color: rgba(79,156,255,.15);
+}
+
+.quote-card__text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text) !important;
+    line-height: 1.4;
+    margin-bottom: 10px;
+}
+
+.quote-card__sub {
+    font-size: .75rem;
+    color: var(--muted) !important;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+
+/* ─── MOBILE SIDEBAR ─────────────────────────────────────── */
+
+@media (max-width: 640px) {
+    .sidebar { gap: 12px; }
+    .sidebar-card { padding: 16px; border-radius: var(--r-md); }
+    .habit-pill { font-size: .75rem; padding: 7px 11px; }
+    .rule-card { padding: 11px 12px 11px 14px; }
+    .rule-card h4 { font-size: .82rem; }
+}
+
+@media (max-width: 480px) {
+    .habit-list { gap: 6px; }
+    .study-item { padding: 9px 11px; }
+}

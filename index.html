@@ -1,775 +1,675 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#080c12" />
+  <meta name="description" content="Subham's Daily Operating System — Backend Engineer routine, study plan, and job hunt tracker." />
 
-    <title>Daily Operating System</title>
+  <title>Daily OS — Subham's Backend Engineer System</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Preconnect fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,400&display=swap" rel="stylesheet" />
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/timeline.css" />
+  <link rel="stylesheet" href="css/sidebar.css" />
+</head>
 
-    <link rel="stylesheet" href="style.css" />
-  </head>
+<body>
 
-  <body>
-    <header class="hero">
-      <div class="hero-content">
-        <span class="hero-tag"> DAILY OPERATING SYSTEM </span>
+  <!-- ═══════════════════════════════════════════════════════
+       HERO
+  ════════════════════════════════════════════════════════ -->
 
-        <h1>Build. Apply. Repeat.</h1>
+  <header class="hero" role="banner">
+    <div class="hero__inner">
 
-        <p>Backend Engineer Journey • Daily Reference Dashboard</p>
+      <div class="hero__left">
+        <span class="hero__tag" aria-hidden="true">
+          <span class="hero__tag-dot"></span>
+          Daily Operating System
+        </span>
+        <h1 class="hero__title">Build.<br>Apply.<br>Repeat.</h1>
+        <p class="hero__sub">Backend Engineer Journey &nbsp;·&nbsp; Daily Reference Dashboard</p>
       </div>
-    </header>
 
-    <!-- ========================= -->
-    <!-- Day Navigation -->
-    <!-- ========================= -->
+      <!-- Live clock — hidden on mobile -->
+      <div class="hero__clock" aria-label="Current time" role="timer">
+        <div class="clock__time" id="clock-time">00:00</div>
+        <div class="clock__date" id="clock-date"></div>
+      </div>
 
-    <nav class="day-nav">
-      <button class="day-btn active" data-day="mwf">Mon / Wed / Fri</button>
+    </div>
+  </header>
 
-      <button class="day-btn" data-day="tt">Tue / Thu</button>
 
-      <button class="day-btn" data-day="sat">Saturday</button>
+  <!-- ═══════════════════════════════════════════════════════
+       DAY NAVIGATION
+  ════════════════════════════════════════════════════════ -->
 
-      <button class="day-btn" data-day="sun">Sunday</button>
-    </nav>
+  <nav class="day-nav" role="tablist" aria-label="Select day schedule">
+    <span class="day-nav__label">Schedule</span>
 
-    <!-- ========================= -->
-    <!-- Main Layout -->
-    <!-- ========================= -->
+    <button class="day-btn active" data-day="mwf" role="tab" aria-selected="true" id="tab-mwf" aria-controls="mwf">
+      <span class="day-btn__dot" aria-hidden="true"></span>
+      Mon / Wed / Fri
+    </button>
 
-    <main class="layout">
-      <!-- LEFT SIDE -->
+    <button class="day-btn" data-day="tt" role="tab" aria-selected="false" id="tab-tt" aria-controls="tt">
+      <span class="day-btn__dot" aria-hidden="true"></span>
+      Tue / Thu
+    </button>
 
-      <section class="content">
-        <!-- ===================================== -->
-        <!-- MONDAY / WEDNESDAY / FRIDAY -->
-        <!-- ===================================== -->
+    <button class="day-btn" data-day="sat" role="tab" aria-selected="false" id="tab-sat" aria-controls="sat">
+      <span class="day-btn__dot" aria-hidden="true"></span>
+      Saturday
+    </button>
 
-        <section class="day-panel active" id="mwf">
-          <h2 class="section-title">Monday • Wednesday • Friday</h2>
+    <button class="day-btn" data-day="sun" role="tab" aria-selected="false" id="tab-sun" aria-controls="sun">
+      <span class="day-btn__dot" aria-hidden="true"></span>
+      Sunday
+    </button>
+  </nav>
 
-          <!-- CARD -->
 
-          <article class="routine-card wake">
-            <div class="time">07:30 AM</div>
+  <!-- ═══════════════════════════════════════════════════════
+       MAIN LAYOUT
+  ════════════════════════════════════════════════════════ -->
 
-            <div class="card-content">
-              <div class="card-header">
-                <h3>🌅 Wake Anchor</h3>
+  <main class="layout">
 
-                <span class="badge success"> NON NEGOTIABLE </span>
-              </div>
+    <!-- ─── TIMELINE COLUMN ─────────────────────────────── -->
 
-              <ul>
-                <li>Alarm fixed at 7:30 AM</li>
+    <section class="content">
 
-                <li>No snooze</li>
 
-                <li>500ml water immediately</li>
+      <!-- ══════════════════════════════════════════
+           MON / WED / FRI
+      ══════════════════════════════════════════ -->
 
-                <li>No phone for first 20 minutes</li>
+      <section class="day-panel active" id="mwf" role="tabpanel" aria-labelledby="tab-mwf">
+        <h2 class="section-title">Monday · Wednesday · Friday</h2>
 
-                <li>Feet on floor within 60 seconds</li>
-              </ul>
+        <!-- Wake -->
+        <article class="routine-card wake" data-start="07:30 AM" data-end="07:30 AM">
+          <div class="time">
+            <span class="time__primary">07:30 AM</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header">
+              <h3>🌅 Wake Anchor</h3>
+              <span class="badge success">NON NEGOTIABLE</span>
             </div>
-          </article>
+            <ul>
+              <li>Alarm fixed at 7:30 AM</li>
+              <li>No snooze</li>
+              <li>500 ml water immediately</li>
+              <li>No phone for first 20 minutes</li>
+              <li>Feet on floor within 60 seconds</li>
+            </ul>
+          </div>
+        </article>
 
-          <!-- CARD -->
-
-          <article class="routine-card neutral">
-            <div class="time">7:30 – 10:00</div>
-
-            <div class="card-content">
-              <div class="card-header">
-                <h3>☀ Morning Buffer</h3>
-              </div>
-
-              <ul>
-                <li>Get ready</li>
-
-                <li>Breakfast</li>
-
-                <li>Commute</li>
-
-                <li>No Slack</li>
-
-                <li>No Email</li>
-
-                <li>No Job Hunt</li>
-              </ul>
+        <!-- Morning Buffer -->
+        <article class="routine-card neutral" data-start="07:30 AM" data-end="10:00 AM">
+          <div class="time">
+            <span class="time__primary">7:30 – 10:00</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header">
+              <h3>☀️ Morning Buffer</h3>
             </div>
-          </article>
-
-          <!-- CARD -->
-
-          <article class="routine-card office">
-            <div class="time">10 AM – 7 PM</div>
-
-            <div class="card-content">
-              <div class="card-header">
-                <h3>💼 Office Mode</h3>
-
-                <span class="badge blue"> FULL PRESENCE </span>
-              </div>
-
-              <ul>
-                <li>Backend Development</li>
-
-                <li>Client Communication</li>
-
-                <li>Help Juniors</li>
-
-                <li>Cross-team Collaboration</li>
-
-                <li>Do not switch context</li>
-              </ul>
-            </div>
-          </article>
-
-          <!-- CARD -->
-
-          <article class="routine-card lunch">
-            <div class="time">01:00 PM</div>
-
-            <div class="card-content">
-              <div class="card-header">
-                <h3>🍱 Lunch • T1 Scout</h3>
-
-                <span class="badge orange"> PERSONAL PHONE </span>
-              </div>
-
-              <ul>
-                <li>LinkedIn Jobs</li>
-
-                <li>Naukri Search</li>
-
-                <li>Save 1–2 Roles</li>
-
-                <li>Check Recruiter Replies</li>
-
-                <li>Reply if Needed</li>
-
-                <li>Note Company Name</li>
-              </ul>
-            </div>
-          </article>
-
-          <!-- CARD -->
-
-          <article class="routine-card office">
-            <div class="time">07:00 PM</div>
-
-            <div class="card-content">
-              <div class="card-header">
-                <h3>🚪 Office Sign-off</h3>
-
-                <span class="badge blue"> DAILY RESET </span>
-              </div>
-
-              <ul>
-                <li>Write today's achievement</li>
-
-                <li>Close Slack</li>
-
-                <li>Close Email</li>
-
-                <li>Close Browser</li>
-
-                <li>Work Ends Here</li>
-              </ul>
-            </div>
-          </article>
-
-          <!-- CARD -->
-
-          <article class="routine-card neutral">
-            <div class="time">7:00 – 8:00</div>
-
-            <div class="card-content">
-              <h3>🍽 Dinner & Recovery</h3>
-
-              <ul>
-                <li>Dinner</li>
-
-                <li>Walk</li>
-
-                <li>Relax</li>
-
-                <li>No Goals</li>
-              </ul>
-            </div>
-          </article>
-
-          <!-- CARD -->
-
-          <article class="routine-card study">
-            <div class="time">8:00 – 9:00</div>
-
-            <div class="card-content">
-              <div class="card-header">
-                <h3>📘 DSA Session</h3>
-
-                <span class="badge purple"> PROTECTED </span>
-              </div>
-
-              <ul>
-                <li>Phone in another room</li>
-
-                <li>One Pattern Only</li>
-
-                <li>1–2 Problems</li>
-
-                <li>Friday → DBMS Revision</li>
-              </ul>
-            </div>
-          </article>
-
-          <!-- CARD -->
-
-          <article class="routine-card neutral">
-            <div class="time">9 PM – 12 AM</div>
-
-            <div class="card-content">
-              <h3>🌙 Free Time</h3>
-
-              <ul>
-                <li>Watch</li>
-
-                <li>Socialize</li>
-
-                <li>Relax</li>
-
-                <li>Screens Dim 11:30</li>
-              </ul>
-            </div>
-          </article>
-
-          <!-- CARD -->
-
-          <article class="routine-card wake">
-            <div class="time">12:00 AM</div>
-
-            <div class="card-content">
-              <div class="card-header">
-                <h3>😴 Sleep Anchor</h3>
-
-                <span class="badge success"> NON NEGOTIABLE </span>
-              </div>
-
-              <ul>
-                <li>Lights Off</li>
-
-                <li>Phone Away</li>
-
-                <li>7.5 Hours Sleep</li>
-              </ul>
-            </div>
-          </article>
-        </section>
-
-        <!-- ========================================================= -->
-        <!-- TUESDAY / THURSDAY -->
-        <!-- ========================================================= -->
-
-        <section class="day-panel" id="tt">
-          <h2 class="section-title">Tuesday • Thursday</h2>
-
-          <article class="routine-card wake">
-            <div class="time">07:30 AM</div>
-
-            <div class="card-content">
-              <div class="card-header">
-                <h3>🌅 Wake Anchor</h3>
-
-                <span class="badge success"> NON NEGOTIABLE </span>
-              </div>
-
-              <p>Same routine as Monday.</p>
-            </div>
-          </article>
-
-          <article class="routine-card neutral">
-            <div class="time">7:30 – 10:00</div>
-
-            <div class="card-content">
-              <h3>☀ Morning Buffer</h3>
-
-              <p>Same routine as Monday.</p>
-            </div>
-          </article>
-
-          <article class="routine-card office">
-            <div class="time">10 AM – 7 PM</div>
-
-            <div class="card-content">
+            <ul>
+              <li>Get ready</li>
+              <li>Breakfast</li>
+              <li>Commute</li>
+              <li>No Slack · No Email · No Job Hunt</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Office -->
+        <article class="routine-card office" data-start="10:00 AM" data-end="07:00 PM">
+          <div class="time">
+            <span class="time__primary">10 AM – 7 PM</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header">
               <h3>💼 Office Mode</h3>
-
-              <p>Same routine as Monday.</p>
+              <span class="badge blue">FULL PRESENCE</span>
             </div>
-          </article>
+            <ul>
+              <li>Backend Development</li>
+              <li>Client Communication</li>
+              <li>Help Juniors</li>
+              <li>Cross-team Collaboration</li>
+              <li>Do not switch context</li>
+            </ul>
+          </div>
+        </article>
 
-          <article class="routine-card lunch">
-            <div class="time">01:00 PM</div>
-
-            <div class="card-content">
-              <div class="card-header">
-                <h3>🍱 Lunch Scout</h3>
-
-                <span class="badge orange"> PERSONAL PHONE </span>
-              </div>
-
-              <ul>
-                <li>LinkedIn Jobs</li>
-
-                <li>Naukri Search</li>
-
-                <li>Save 1–2 Roles</li>
-
-                <li>Check Recruiter Replies</li>
-
-                <li>No T2 Platforms</li>
-              </ul>
+        <!-- Lunch Scout -->
+        <article class="routine-card lunch" data-start="01:00 PM" data-end="02:00 PM">
+          <div class="time">
+            <span class="time__primary">01:00 PM</span>
+            <span class="time__secondary">Lunch break</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header">
+              <h3>🍱 Lunch · T1 Scout</h3>
+              <span class="badge orange">PERSONAL PHONE</span>
             </div>
-          </article>
+            <ul>
+              <li>LinkedIn Jobs</li>
+              <li>Naukri Search</li>
+              <li>Save 1–2 Roles</li>
+              <li>Check Recruiter Replies</li>
+              <li>Reply if Needed</li>
+              <li>Note Company Name</li>
+            </ul>
+          </div>
+        </article>
 
-          <article class="routine-card office">
-            <div class="time">07:00 PM</div>
-
-            <div class="card-content">
+        <!-- Office Sign-off -->
+        <article class="routine-card office" data-start="07:00 PM" data-end="07:30 PM">
+          <div class="time">
+            <span class="time__primary">07:00 PM</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header">
               <h3>🚪 Office Sign-off</h3>
-
-              <p>Same ritual as Monday.</p>
+              <span class="badge blue">DAILY RESET</span>
             </div>
-          </article>
+            <ul>
+              <li>Write today's achievement</li>
+              <li>Close Slack · Close Email</li>
+              <li>Close Browser</li>
+              <li>Work Ends Here</li>
+            </ul>
+          </div>
+        </article>
 
-          <article class="routine-card neutral">
-            <div class="time">7 PM – 8 PM</div>
+        <!-- Dinner & Recovery -->
+        <article class="routine-card neutral" data-start="07:00 PM" data-end="08:00 PM">
+          <div class="time">
+            <span class="time__primary">7 – 8 PM</span>
+          </div>
+          <div class="card-content">
+            <h3>🍽 Dinner &amp; Recovery</h3>
+            <ul>
+              <li>Dinner</li>
+              <li>Walk</li>
+              <li>Relax · No Goals</li>
+            </ul>
+          </div>
+        </article>
 
-            <div class="card-content">
-              <h3>🍽 Recovery</h3>
-
-              <p>Dinner • Walk • Relax</p>
+        <!-- DSA -->
+        <article class="routine-card study" data-start="08:00 PM" data-end="09:00 PM">
+          <div class="time">
+            <span class="time__primary">8 – 9 PM</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header">
+              <h3>📘 DSA Session</h3>
+              <span class="badge purple">PROTECTED</span>
             </div>
-          </article>
+            <ul>
+              <li>Phone in another room</li>
+              <li>One Pattern Only</li>
+              <li>1–2 Problems</li>
+              <li>Friday → DBMS Revision</li>
+            </ul>
+          </div>
+        </article>
 
-          <article class="routine-card study">
-            <div class="time">8 PM – 9 PM</div>
+        <!-- Free Time -->
+        <article class="routine-card neutral" data-start="09:00 PM" data-end="12:00 AM">
+          <div class="time">
+            <span class="time__primary">9 PM – 12 AM</span>
+          </div>
+          <div class="card-content">
+            <h3>🌙 Free Time</h3>
+            <ul>
+              <li>Watch · Socialize · Relax</li>
+              <li>Screens Dim at 11:30</li>
+            </ul>
+          </div>
+        </article>
 
-            <div class="card-content">
-              <div class="card-header">
-                <h3>💻 Node.js Side Project</h3>
-
-                <span class="badge purple"> BUILD ONLY </span>
-              </div>
-
-              <ul>
-                <li>No tutorials</li>
-
-                <li>Build only</li>
-
-                <li>One concrete output</li>
-
-                <li>Push code</li>
-
-                <li>Showcaseable work only</li>
-              </ul>
-            </div>
-          </article>
-
-          <article class="routine-card neutral">
-            <div class="time">9 PM – 12 AM</div>
-
-            <div class="card-content">
-              <h3>🌙 Free Time</h3>
-            </div>
-          </article>
-
-          <article class="routine-card wake">
-            <div class="time">12 AM</div>
-
-            <div class="card-content">
+        <!-- Sleep -->
+        <article class="routine-card wake" data-start="12:00 AM" data-end="07:30 AM">
+          <div class="time">
+            <span class="time__primary">12:00 AM</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header">
               <h3>😴 Sleep Anchor</h3>
+              <span class="badge success">NON NEGOTIABLE</span>
             </div>
-          </article>
-        </section>
+            <ul>
+              <li>Lights Off</li>
+              <li>Phone Away</li>
+              <li>7.5 Hours Sleep</li>
+            </ul>
+          </div>
+        </article>
 
-        <!-- ========================================================= -->
-        <!-- SATURDAY -->
-        <!-- ========================================================= -->
+      </section><!-- /mwf -->
 
-        <section class="day-panel" id="sat">
-          <h2 class="section-title">Saturday</h2>
 
-          <article class="routine-card wake">
-            <div class="time">07:30 AM</div>
+      <!-- ══════════════════════════════════════════
+           TUE / THU
+      ══════════════════════════════════════════ -->
 
-            <div class="card-content">
+      <section class="day-panel" id="tt" role="tabpanel" aria-labelledby="tab-tt">
+        <h2 class="section-title">Tuesday · Thursday</h2>
+
+        <article class="routine-card wake" data-start="07:30 AM">
+          <div class="time"><span class="time__primary">07:30 AM</span></div>
+          <div class="card-content">
+            <div class="card-header">
               <h3>🌅 Wake Anchor</h3>
-
-              <p>Weekend follows the same wake time.</p>
+              <span class="badge success">NON NEGOTIABLE</span>
             </div>
-          </article>
+            <ul><li>Same routine as Monday</li></ul>
+          </div>
+        </article>
 
-          <article class="routine-card study">
-            <div class="time">8:30 – 9:00</div>
+        <article class="routine-card neutral" data-start="07:30 AM" data-end="10:00 AM">
+          <div class="time"><span class="time__primary">7:30 – 10:00</span></div>
+          <div class="card-content">
+            <h3>☀️ Morning Buffer</h3>
+            <ul><li>Get ready · Breakfast · Commute</li></ul>
+          </div>
+        </article>
 
-            <div class="card-content">
-              <div class="card-header">
-                <h3>📋 T2 Preparation</h3>
-
-                <span class="badge purple"> PERSONAL LAPTOP </span>
-              </div>
-
-              <ul>
-                <li>Wellfound</li>
-
-                <li>Instahyre</li>
-
-                <li>Cutshort</li>
-
-                <li>Indeed</li>
-
-                <li>Career Pages</li>
-
-                <li>Review Phone Notes</li>
-
-                <li>AmbitionBox</li>
-              </ul>
+        <article class="routine-card office" data-start="10:00 AM" data-end="07:00 PM">
+          <div class="time"><span class="time__primary">10 AM – 7 PM</span></div>
+          <div class="card-content">
+            <div class="card-header">
+              <h3>💼 Office Mode</h3>
+              <span class="badge blue">FULL PRESENCE</span>
             </div>
-          </article>
+            <ul><li>Same as Monday</li></ul>
+          </div>
+        </article>
 
-          <article class="routine-card lunch">
-            <div class="time">9:00 – 9:30</div>
-
-            <div class="card-content">
-              <h3>🚀 Bulk Apply</h3>
-
-              <ul>
-                <li>Apply to 3–5 Jobs</li>
-
-                <li>Move to Applied</li>
-
-                <li>Set Follow-up Date</li>
-              </ul>
+        <article class="routine-card lunch" data-start="01:00 PM" data-end="02:00 PM">
+          <div class="time"><span class="time__primary">01:00 PM</span></div>
+          <div class="card-content">
+            <div class="card-header">
+              <h3>🍱 Lunch Scout</h3>
+              <span class="badge orange">PERSONAL PHONE</span>
             </div>
-          </article>
+            <ul>
+              <li>LinkedIn Jobs</li>
+              <li>Naukri Search</li>
+              <li>Save 1–2 Roles</li>
+              <li>Check Recruiter Replies</li>
+              <li>No T2 Platforms today</li>
+            </ul>
+          </div>
+        </article>
 
-          <article class="routine-card lunch">
-            <div class="time">9:30 – 10:00</div>
-
-            <div class="card-content">
-              <h3>📧 Cold Outreach</h3>
-
-              <ul>
-                <li>Recruiter Emails</li>
-
-                <li>LinkedIn DMs</li>
-
-                <li>Move to Outreach</li>
-              </ul>
+        <article class="routine-card office" data-start="07:00 PM" data-end="07:30 PM">
+          <div class="time"><span class="time__primary">07:00 PM</span></div>
+          <div class="card-content">
+            <div class="card-header">
+              <h3>🚪 Office Sign-off</h3>
+              <span class="badge blue">DAILY RESET</span>
             </div>
-          </article>
+            <ul><li>Same ritual as Monday</li></ul>
+          </div>
+        </article>
 
-          <article class="routine-card lunch">
-            <div class="time">10:00 – 10:30</div>
+        <article class="routine-card neutral" data-start="07:00 PM" data-end="08:00 PM">
+          <div class="time"><span class="time__primary">7 – 8 PM</span></div>
+          <div class="card-content">
+            <h3>🍽 Recovery</h3>
+            <ul><li>Dinner · Walk · Relax</li></ul>
+          </div>
+        </article>
 
-            <div class="card-content">
-              <h3>🔄 Follow-ups</h3>
-
-              <ul>
-                <li>Send Follow-up</li>
-
-                <li>Log Notes</li>
-
-                <li>Replace Closed Roles</li>
-              </ul>
+        <!-- Node.js Side Project -->
+        <article class="routine-card study" data-start="08:00 PM" data-end="09:00 PM">
+          <div class="time"><span class="time__primary">8 – 9 PM</span></div>
+          <div class="card-content">
+            <div class="card-header">
+              <h3>💻 Node.js Side Project</h3>
+              <span class="badge purple">BUILD ONLY</span>
             </div>
-          </article>
+            <ul>
+              <li>No tutorials</li>
+              <li>Build only</li>
+              <li>One concrete output</li>
+              <li>Push code</li>
+              <li>Showcaseable work only</li>
+            </ul>
+          </div>
+        </article>
 
-          <article class="routine-card neutral">
-            <div class="time">Rest of Day</div>
+        <article class="routine-card neutral" data-start="09:00 PM" data-end="12:00 AM">
+          <div class="time"><span class="time__primary">9 PM – 12 AM</span></div>
+          <div class="card-content">
+            <h3>🌙 Free Time</h3>
+            <ul><li>Watch · Socialize · Relax</li></ul>
+          </div>
+        </article>
 
-            <div class="card-content">
-              <h3>🌴 Recovery</h3>
-
-              <p>Free day. Enjoy without guilt.</p>
+        <article class="routine-card wake" data-start="12:00 AM">
+          <div class="time"><span class="time__primary">12 AM</span></div>
+          <div class="card-content">
+            <div class="card-header">
+              <h3>😴 Sleep Anchor</h3>
+              <span class="badge success">NON NEGOTIABLE</span>
             </div>
-          </article>
-        </section>
+            <ul><li>Lights Off · Phone Away · 7.5 h</li></ul>
+          </div>
+        </article>
 
-        <!-- ========================================================= -->
-        <!-- SUNDAY -->
-        <!-- ========================================================= -->
+      </section><!-- /tt -->
 
-        <section class="day-panel" id="sun">
-          <h2 class="section-title">Sunday</h2>
 
-          <article class="routine-card wake">
-            <div class="time">07:30 AM</div>
+      <!-- ══════════════════════════════════════════
+           SATURDAY
+      ══════════════════════════════════════════ -->
 
-            <div class="card-content">
-              <h3>🌅 Wake Anchor</h3>
+      <section class="day-panel" id="sat" role="tabpanel" aria-labelledby="tab-sat">
+        <h2 class="section-title">Saturday</h2>
+
+        <article class="routine-card wake" data-start="07:30 AM">
+          <div class="time"><span class="time__primary">07:30 AM</span></div>
+          <div class="card-content">
+            <h3>🌅 Wake Anchor</h3>
+            <ul><li>Weekend keeps the same wake time</li></ul>
+          </div>
+        </article>
+
+        <article class="routine-card study" data-start="08:30 AM" data-end="09:00 AM">
+          <div class="time">
+            <span class="time__primary">8:30 – 9:00</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header">
+              <h3>📋 T2 Preparation</h3>
+              <span class="badge purple">PERSONAL LAPTOP</span>
             </div>
-          </article>
+            <ul>
+              <li>Wellfound · Instahyre · Cutshort</li>
+              <li>Indeed · Career Pages</li>
+              <li>Review Phone Notes</li>
+              <li>AmbitionBox</li>
+            </ul>
+          </div>
+        </article>
 
-          <article class="routine-card study">
-            <div class="time">9 AM – 10 AM</div>
+        <article class="routine-card lunch" data-start="09:00 AM" data-end="09:30 AM">
+          <div class="time"><span class="time__primary">9:00 – 9:30</span></div>
+          <div class="card-content">
+            <h3>🚀 Bulk Apply</h3>
+            <ul>
+              <li>Apply to 3–5 Jobs</li>
+              <li>Move to Applied</li>
+              <li>Set Follow-up Date</li>
+            </ul>
+          </div>
+        </article>
 
-            <div class="card-content">
-              <div class="card-header">
-                <h3>📊 Weekly Review</h3>
+        <article class="routine-card lunch" data-start="09:30 AM" data-end="10:00 AM">
+          <div class="time"><span class="time__primary">9:30 – 10:00</span></div>
+          <div class="card-content">
+            <h3>📧 Cold Outreach</h3>
+            <ul>
+              <li>Recruiter Emails</li>
+              <li>LinkedIn DMs</li>
+              <li>Move to Outreach</li>
+            </ul>
+          </div>
+        </article>
 
-                <span class="badge purple"> REVIEW ONLY </span>
-              </div>
+        <article class="routine-card lunch" data-start="10:00 AM" data-end="10:30 AM">
+          <div class="time"><span class="time__primary">10:00 – 10:30</span></div>
+          <div class="card-content">
+            <h3>🔄 Follow-ups</h3>
+            <ul>
+              <li>Send Follow-up</li>
+              <li>Log Notes</li>
+              <li>Replace Closed Roles</li>
+            </ul>
+          </div>
+        </article>
 
-              <ul>
-                <li>Check lemon.io</li>
+        <article class="routine-card neutral">
+          <div class="time"><span class="time__primary">Rest of Day</span></div>
+          <div class="card-content">
+            <h3>🌴 Recovery</h3>
+            <ul><li>Free day — enjoy without guilt.</li></ul>
+          </div>
+        </article>
 
-                <li>Glassdoor Alerts</li>
+      </section><!-- /sat -->
 
-                <li>Reply to Recruiters</li>
 
-                <li>Weekly Notion Review</li>
+      <!-- ══════════════════════════════════════════
+           SUNDAY
+      ══════════════════════════════════════════ -->
 
-                <li>Review Targets</li>
+      <section class="day-panel" id="sun" role="tabpanel" aria-labelledby="tab-sun">
+        <h2 class="section-title">Sunday</h2>
 
-                <li>Add New Companies</li>
-              </ul>
+        <article class="routine-card wake" data-start="07:30 AM">
+          <div class="time"><span class="time__primary">07:30 AM</span></div>
+          <div class="card-content">
+            <h3>🌅 Wake Anchor</h3>
+            <ul><li>Weekend keeps the same wake time</li></ul>
+          </div>
+        </article>
+
+        <article class="routine-card study" data-start="09:00 AM" data-end="10:00 AM">
+          <div class="time"><span class="time__primary">9 – 10 AM</span></div>
+          <div class="card-content">
+            <div class="card-header">
+              <h3>📊 Weekly Review</h3>
+              <span class="badge purple">REVIEW ONLY</span>
             </div>
-          </article>
-
-          <article class="routine-card neutral">
-            <div class="time">Rest of Day</div>
-
-            <div class="card-content">
-              <h3>🌙 Recharge</h3>
-
-              <p>Relax, reset and prepare mentally for Monday.</p>
-            </div>
-          </article>
-        </section>
-
-        <!-- ============================================= -->
-        <!-- RIGHT SIDEBAR -->
-        <!-- ============================================= -->
-
-        <aside class="sidebar">
-
-            <!-- ============================ -->
-            <!-- Weekly Study Pattern -->
-            <!-- ============================ -->
-
-            <div class="sidebar-card">
-
-                <h2 class="sidebar-title">
-                    📚 Weekly Study Pattern
-                </h2>
-
-                <div class="study-grid">
-
-                    <div class="study-item">
-                        <span class="day">MON</span>
-                        <span class="topic dsa">DSA</span>
-                    </div>
-
-                    <div class="study-item">
-                        <span class="day">TUE</span>
-                        <span class="topic node">Node Project</span>
-                    </div>
-
-                    <div class="study-item">
-                        <span class="day">WED</span>
-                        <span class="topic dsa">DSA</span>
-                    </div>
-
-                    <div class="study-item">
-                        <span class="day">THU</span>
-                        <span class="topic node">Node Project</span>
-                    </div>
-
-                    <div class="study-item">
-                        <span class="day">FRI</span>
-                        <span class="topic dsa">DSA + DBMS</span>
-                    </div>
-
-                    <div class="study-item">
-                        <span class="day">SAT</span>
-                        <span class="topic free">Job Hunt</span>
-                    </div>
-
-                    <div class="study-item">
-                        <span class="day">SUN</span>
-                        <span class="topic free">Review</span>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- ============================ -->
-            <!-- Daily Habits -->
-            <!-- ============================ -->
-
-            <div class="sidebar-card">
-
-                <h2 class="sidebar-title">
-
-                    🔥 Daily Habits
-
-                </h2>
-
-                <div class="habit-list">
-
-                    <span class="habit-pill">
-                        🌙 Sleep by 12
-                    </span>
-
-                    <span class="habit-pill">
-                        ☀ Wake 7:30
-                    </span>
-
-                    <span class="habit-pill">
-                        💻 Study 8–9 PM
-                    </span>
-
-                    <span class="habit-pill">
-                        💧 Water 2L+
-                    </span>
-
-                    <span class="habit-pill">
-                        🚭 No Smoking
-                    </span>
-
-                    <span class="habit-pill">
-                        💼 Job Hunt Check
-                    </span>
-
-                    <span class="habit-pill">
-                        🚪 Sign-off Ritual
-                    </span>
-
-                </div>
-
-            </div>
-
-            <!-- ============================ -->
-            <!-- Core Rules -->
-            <!-- ============================ -->
-
-            <div class="sidebar-card">
-
-                <h2 class="sidebar-title">
-
-                    🚫 Core Rules
-
-                </h2>
-
-                <div class="rule-list">
-
-                    <div class="rule-card">
-                        <h4>No job hunt on office laptop</h4>
-                        <p>Lunch = personal phone. Saturday = personal laptop.</p>
-                    </div>
-
-                    <div class="rule-card">
-                        <h4>No random scouting</h4>
-                        <p>Only during lunch or Saturday.</p>
-                    </div>
-
-                    <div class="rule-card">
-                        <h4>No weekday applications</h4>
-                        <p>Save jobs. Apply on Saturday.</p>
-                    </div>
-
-                    <div class="rule-card">
-                        <h4>No "study first"</h4>
-                        <p>Study and applications are separate systems.</p>
-                    </div>
-
-                    <div class="rule-card">
-                        <h4>No work after 7 PM</h4>
-                        <p>Office closes after sign-off.</p>
-                    </div>
-
-                    <div class="rule-card">
-                        <h4>No tutorials Tue / Thu</h4>
-                        <p>Node.js sessions are build-only.</p>
-                    </div>
-
-                    <div class="rule-card">
-                        <h4>No resume tweaking</h4>
-                        <p>Keep applying. Don't over-optimize.</p>
-                    </div>
-
-                    <div class="rule-card">
-                        <h4>No Glassdoor browsing</h4>
-                        <p>Review alerts only on Sunday.</p>
-                    </div>
-
-                    <div class="rule-card">
-                        <h4>No low CTC applications</h4>
-                        <p>Respect your salary floor.</p>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- ============================ -->
-            <!-- Quote -->
-            <!-- ============================ -->
-
-            <div class="sidebar-card quote-card">
-
-                <p>
-
-                    "Consistency beats intensity."
-
-                </p>
-
-                <span>
-
-                    Build → Apply → Repeat
-
-                </span>
-
-            </div>
-
-        </aside>
-
-    </main>
-
-    <!-- ============================================= -->
-    <!-- FOOTER -->
-    <!-- ============================================= -->
-
-    <footer class="footer">
-
-        <div>
-
-            <strong>Daily Operating System</strong>
+            <ul>
+              <li>Check lemon.io</li>
+              <li>Glassdoor Alerts</li>
+              <li>Reply to Recruiters</li>
+              <li>Weekly Notion Review</li>
+              <li>Review Targets</li>
+              <li>Add New Companies</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="routine-card neutral">
+          <div class="time"><span class="time__primary">Rest of Day</span></div>
+          <div class="card-content">
+            <h3>🌙 Recharge</h3>
+            <ul><li>Relax, reset and prepare mentally for Monday.</li></ul>
+          </div>
+        </article>
+
+      </section><!-- /sun -->
+
+    </section><!-- /content -->
+
+
+    <!-- ─── SIDEBAR / CONTROL CENTER ────────────────────── -->
+
+    <aside class="sidebar" aria-label="Control center">
+
+      <!-- Progress Widget -->
+      <div class="sidebar-card progress-card">
+        <h2 class="sidebar-title">
+          <span class="sidebar-title__icon">⚡</span>
+          Today's Progress
+        </h2>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="width: 0%"></div>
+        </div>
+        <div class="progress-meta">
+          <span class="progress-done">–</span>
+          <span class="progress-stat">0%</span>
+        </div>
+      </div>
+
+      <!-- Weekly Study Pattern -->
+      <div class="sidebar-card">
+        <h2 class="sidebar-title">
+          <span class="sidebar-title__icon">📚</span>
+          Weekly Study Pattern
+        </h2>
+        <div class="study-grid">
+
+          <div class="study-item">
+            <span class="study-item__day">MON</span>
+            <span class="topic dsa">DSA</span>
+          </div>
+
+          <div class="study-item">
+            <span class="study-item__day">TUE</span>
+            <span class="topic node">Node Project</span>
+          </div>
+
+          <div class="study-item">
+            <span class="study-item__day">WED</span>
+            <span class="topic dsa">DSA</span>
+          </div>
+
+          <div class="study-item">
+            <span class="study-item__day">THU</span>
+            <span class="topic node">Node Project</span>
+          </div>
+
+          <div class="study-item">
+            <span class="study-item__day">FRI</span>
+            <span class="topic dsa">DSA + DBMS</span>
+          </div>
+
+          <div class="study-item">
+            <span class="study-item__day">SAT</span>
+            <span class="topic free">Job Hunt</span>
+          </div>
+
+          <div class="study-item">
+            <span class="study-item__day">SUN</span>
+            <span class="topic free">Review</span>
+          </div>
 
         </div>
+      </div>
 
-        <div>
+      <!-- Daily Habits -->
+      <div class="sidebar-card">
+        <h2 class="sidebar-title">
+          <span class="sidebar-title__icon">🔥</span>
+          Daily Habits
+        </h2>
+        <div class="habit-list">
+          <span class="habit-pill">🌙 Sleep by 12</span>
+          <span class="habit-pill">☀️ Wake 7:30</span>
+          <span class="habit-pill">💻 Study 8–9 PM</span>
+          <span class="habit-pill">💧 Water 2L+</span>
+          <span class="habit-pill">🚭 No Smoking</span>
+          <span class="habit-pill">💼 Job Hunt Check</span>
+          <span class="habit-pill">🚪 Sign-off Ritual</span>
+        </div>
+      </div>
 
-            Backend Engineer Roadmap
+      <!-- Core Rules -->
+      <div class="sidebar-card">
+        <h2 class="sidebar-title">
+          <span class="sidebar-title__icon">🚫</span>
+          Core Rules
+        </h2>
+        <div class="rule-list">
+
+          <div class="rule-card">
+            <h4>No job hunt on office laptop</h4>
+            <p>Lunch = personal phone. Saturday = personal laptop.</p>
+          </div>
+
+          <div class="rule-card">
+            <h4>No random scouting</h4>
+            <p>Only during lunch or Saturday.</p>
+          </div>
+
+          <div class="rule-card">
+            <h4>No weekday applications</h4>
+            <p>Save jobs. Apply on Saturday.</p>
+          </div>
+
+          <div class="rule-card">
+            <h4>No "study first"</h4>
+            <p>Study and applications are separate systems.</p>
+          </div>
+
+          <div class="rule-card">
+            <h4>No work after 7 PM</h4>
+            <p>Office closes after sign-off.</p>
+          </div>
+
+          <div class="rule-card">
+            <h4>No tutorials Tue / Thu</h4>
+            <p>Node.js sessions are build-only.</p>
+          </div>
+
+          <div class="rule-card">
+            <h4>No resume tweaking</h4>
+            <p>Keep applying. Don't over-optimize.</p>
+          </div>
+
+          <div class="rule-card">
+            <h4>No Glassdoor browsing</h4>
+            <p>Review alerts only on Sunday.</p>
+          </div>
+
+          <div class="rule-card">
+            <h4>No low CTC applications</h4>
+            <p>Respect your salary floor.</p>
+          </div>
 
         </div>
+      </div>
 
-    </footer>
+      <!-- Quote -->
+      <div class="sidebar-card quote-card">
+        <p class="quote-card__text">"Consistency beats intensity."</p>
+        <span class="quote-card__sub">Build → Apply → Repeat</span>
+      </div>
 
-    <script src="app.js"></script>
+    </aside>
+
+  </main><!-- /layout -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════════════════ -->
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer__brand">Daily Operating System</div>
+    <div class="footer__meta">Backend Engineer Roadmap</div>
+    <div class="footer__shortcuts" aria-label="Keyboard shortcuts">
+      Press
+      <kbd class="kbd">1</kbd><kbd class="kbd">2</kbd><kbd class="kbd">3</kbd><kbd class="kbd">4</kbd>
+      to switch days &nbsp;·&nbsp; Swipe left/right on mobile
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       SCRIPTS
+  ════════════════════════════════════════════════════════ -->
+  <script type="module" src="app.js"></script>
 
 </body>
-
 </html>
