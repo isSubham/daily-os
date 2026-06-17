@@ -1,0 +1,1206 @@
+/* ==========================================================
+   DAILY OPERATING SYSTEM
+   PART 1
+   Foundation + Layout
+========================================================== */
+
+/* ==========================
+   GOOGLE FONT
+========================== */
+
+:root{
+
+    /* Background */
+
+    --bg:#0d1117;
+    --surface:#161b22;
+    --surface-2:#1c2128;
+    --surface-3:#21262d;
+
+    /* Borders */
+
+    --border:#30363d;
+
+    /* Text */
+
+    --text:#f0f6fc;
+    --text-light:#c9d1d9;
+    --muted:#8b949e;
+
+    /* Accent */
+
+    --green:#2ecc71;
+    --blue:#3b82f6;
+    --orange:#f97316;
+    --purple:#8b5cf6;
+    --red:#ef4444;
+
+    /* Radius */
+
+    --radius-sm:10px;
+    --radius-md:16px;
+    --radius-lg:22px;
+
+    /* Shadow */
+
+    --shadow:
+
+        0 10px 35px rgba(0,0,0,.35);
+
+}
+
+/* ==========================
+   RESET
+========================== */
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    font-family:'Inter',sans-serif;
+
+    background:var(--bg);
+
+    color:var(--text);
+
+    line-height:1.6;
+
+    min-height:100vh;
+
+}
+
+img{
+
+    display:block;
+
+    max-width:100%;
+
+}
+
+button{
+
+    font:inherit;
+
+    border:none;
+
+    background:none;
+
+    cursor:pointer;
+
+}
+
+ul{
+
+    padding-left:20px;
+
+}
+
+li{
+
+    margin-bottom:8px;
+
+}
+
+a{
+
+    color:inherit;
+
+    text-decoration:none;
+
+}
+
+/* ==========================
+   SCROLLBAR
+========================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#11151b;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#343b46;
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#4a5565;
+
+}
+
+/* ==========================
+   TYPOGRAPHY
+========================== */
+
+h1{
+
+    font-size:56px;
+
+    font-weight:800;
+
+    line-height:1.05;
+
+    letter-spacing:-2px;
+
+}
+
+h2{
+
+    font-size:26px;
+
+    font-weight:700;
+
+}
+
+h3{
+
+    font-size:18px;
+
+    font-weight:600;
+
+}
+
+p{
+
+    color:var(--text-light);
+
+}
+
+.section-title{
+
+    margin-bottom:30px;
+
+}
+
+/* ==========================
+   HERO
+========================== */
+
+.hero{
+
+    padding:80px 24px;
+
+    border-bottom:1px solid var(--border);
+
+    background:
+
+        radial-gradient(circle at top left,#1e293b 0%,transparent 45%),
+
+        radial-gradient(circle at top right,#312e81 0%,transparent 35%),
+
+        var(--bg);
+
+}
+
+.hero-content{
+
+    max-width:1200px;
+
+    margin:auto;
+
+}
+
+.hero-tag{
+
+    display:inline-block;
+
+    margin-bottom:20px;
+
+    padding:8px 18px;
+
+    border-radius:999px;
+
+    background:rgba(59,130,246,.12);
+
+    color:#7db6ff;
+
+    font-size:13px;
+
+    letter-spacing:.12em;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+}
+
+.hero h1{
+
+    margin-bottom:18px;
+
+}
+
+.hero p{
+
+    max-width:700px;
+
+    font-size:18px;
+
+    color:var(--muted);
+
+}
+
+/* ==========================
+   DAY NAV
+========================== */
+
+.day-nav{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+    display:flex;
+
+    gap:12px;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    padding:18px;
+
+    background:rgba(13,17,23,.95);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.day-btn{
+
+    padding:12px 22px;
+
+    border-radius:999px;
+
+    background:var(--surface);
+
+    color:var(--muted);
+
+    border:1px solid var(--border);
+
+    transition:.25s;
+
+}
+
+.day-btn:hover{
+
+    color:white;
+
+    border-color:var(--blue);
+
+    transform:translateY(-2px);
+
+}
+
+.day-btn.active{
+
+    background:var(--blue);
+
+    color:white;
+
+    border-color:var(--blue);
+
+}
+
+/* ==========================
+   LAYOUT
+========================== */
+
+.layout{
+
+    max-width:1400px;
+
+    margin:auto;
+
+    padding:40px 24px 80px;
+
+    display:grid;
+
+    grid-template-columns:
+
+        minmax(0,2fr)
+
+        360px;
+
+    gap:35px;
+
+}
+
+.content{
+
+    min-width:0;
+
+}
+
+.sidebar{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:24px;
+
+}
+
+/* ==========================
+   PANELS
+========================== */
+
+.day-panel{
+
+    display:none;
+
+}
+
+.day-panel.active{
+
+    display:block;
+
+}
+
+/* ==========================
+   SIDEBAR CARD
+========================== */
+
+.sidebar-card{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-md);
+
+    padding:24px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.sidebar-title{
+
+    margin-bottom:18px;
+
+}
+
+/* ==========================
+   FOOTER
+========================== */
+
+.footer{
+
+    margin-top:70px;
+
+    padding:35px;
+
+    text-align:center;
+
+    border-top:1px solid var(--border);
+
+    color:var(--muted);
+
+    background:#0b0f14;
+
+}
+
+/* ==========================
+   UTILITIES
+========================== */
+
+.text-green{
+
+    color:var(--green);
+
+}
+
+.text-blue{
+
+    color:var(--blue);
+
+}
+
+.text-orange{
+
+    color:var(--orange);
+
+}
+
+.text-purple{
+
+    color:var(--purple);
+
+}
+
+.text-muted{
+
+    color:var(--muted);
+
+}
+
+/* ==========================================================
+   PART 2
+   TIMELINE • CARDS • BADGES
+==========================================================*/
+
+/* ==========================
+   TIMELINE
+========================== */
+
+.day-panel{
+
+    position:relative;
+
+    padding-left:40px;
+
+}
+
+.day-panel::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:14px;
+
+    top:0;
+
+    bottom:0;
+
+    width:2px;
+
+    background:linear-gradient(
+        to bottom,
+        transparent,
+        var(--border),
+        transparent
+    );
+
+}
+
+/* ==========================
+   ROUTINE CARD
+========================== */
+
+.routine-card{
+
+    position:relative;
+
+    display:grid;
+
+    grid-template-columns:140px 1fr;
+
+    gap:28px;
+
+    margin-bottom:28px;
+
+    padding:26px;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:18px;
+
+    box-shadow:var(--shadow);
+
+    transition:
+        transform .25s,
+        border-color .25s,
+        box-shadow .25s;
+
+}
+
+.routine-card:hover{
+
+    transform:translateY(-4px);
+
+    border-color:#4b5563;
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.45);
+
+}
+
+/* ==========================
+   TIMELINE DOT
+========================== */
+
+.routine-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:-36px;
+
+    top:36px;
+
+    width:16px;
+
+    height:16px;
+
+    border-radius:50%;
+
+    background:var(--surface-3);
+
+    border:4px solid var(--bg);
+
+}
+
+/* ==========================
+   TIME
+========================== */
+
+.time{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    justify-content:center;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    color:var(--muted);
+
+    letter-spacing:.05em;
+
+    text-transform:uppercase;
+
+}
+
+/* ==========================
+   CONTENT
+========================== */
+
+.card-content{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+}
+
+.card-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:16px;
+
+    flex-wrap:wrap;
+
+}
+
+.card-content h3{
+
+    font-size:20px;
+
+    font-weight:700;
+
+}
+
+.card-content p{
+
+    color:var(--muted);
+
+}
+
+.card-content ul{
+
+    display:grid;
+
+    gap:8px;
+
+    margin-top:4px;
+
+}
+
+.card-content li{
+
+    color:var(--text-light);
+
+}
+
+/* ==========================
+   BADGES
+========================== */
+
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:.08em;
+
+    text-transform:uppercase;
+
+}
+
+.badge.success{
+
+    background:rgba(46,204,113,.15);
+
+    color:#6dffb0;
+
+}
+
+.badge.blue{
+
+    background:rgba(59,130,246,.18);
+
+    color:#7db7ff;
+
+}
+
+.badge.orange{
+
+    background:rgba(249,115,22,.18);
+
+    color:#ffb067;
+
+}
+
+.badge.purple{
+
+    background:rgba(139,92,246,.18);
+
+    color:#bea2ff;
+
+}
+
+/* ==========================
+   CARD COLORS
+========================== */
+
+.routine-card.wake{
+
+    border-left:6px solid var(--green);
+
+}
+
+.routine-card.wake::before{
+
+    background:var(--green);
+
+}
+
+.routine-card.office{
+
+    border-left:6px solid var(--blue);
+
+}
+
+.routine-card.office::before{
+
+    background:var(--blue);
+
+}
+
+.routine-card.study{
+
+    border-left:6px solid var(--purple);
+
+}
+
+.routine-card.study::before{
+
+    background:var(--purple);
+
+}
+
+.routine-card.lunch{
+
+    border-left:6px solid var(--orange);
+
+}
+
+.routine-card.lunch::before{
+
+    background:var(--orange);
+
+}
+
+.routine-card.neutral{
+
+    border-left:6px solid #6b7280;
+
+}
+
+.routine-card.neutral::before{
+
+    background:#6b7280;
+
+}
+
+/* ==========================
+   LIST STYLE
+========================== */
+
+.card-content ul{
+
+    list-style:none;
+
+    padding:0;
+
+}
+
+.card-content li{
+
+    position:relative;
+
+    padding-left:22px;
+
+}
+
+.card-content li::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    top:9px;
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+    background:currentColor;
+
+    opacity:.5;
+
+}
+
+/* ==========================
+   SECTION TITLE
+========================== */
+
+.section-title{
+
+    margin-bottom:36px;
+
+    font-size:30px;
+
+    font-weight:800;
+
+    letter-spacing:-.5px;
+
+}
+
+/* ==========================
+   SMALL TRANSITIONS
+========================== */
+
+.routine-card,
+.badge,
+.day-btn{
+
+    transition:all .25s ease;
+
+}
+
+/* ==========================================================
+   PART 3
+   SIDEBAR • STUDY • HABITS • RULES • RESPONSIVE
+==========================================================*/
+
+/* ==========================
+   STUDY GRID
+========================== */
+
+.study-grid{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+.study-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 18px;
+    border-radius:14px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    transition:.25s;
+}
+
+.study-item:hover{
+    transform:translateX(6px);
+    border-color:#4b5563;
+}
+
+.study-item .day{
+    font-weight:700;
+    letter-spacing:.08em;
+    color:var(--muted);
+    min-width:55px;
+}
+
+.topic{
+    font-weight:600;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:13px;
+}
+
+.topic.dsa{
+    background:rgba(139,92,246,.18);
+    color:#bea2ff;
+}
+
+.topic.node{
+    background:rgba(59,130,246,.18);
+    color:#7db7ff;
+}
+
+.topic.free{
+    background:rgba(46,204,113,.18);
+    color:#7cffb2;
+}
+
+/* ==========================
+   HABITS
+========================== */
+
+.habit-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.habit-pill{
+    padding:10px 16px;
+    border-radius:999px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    color:var(--text-light);
+    font-size:14px;
+    transition:.25s;
+}
+
+.habit-pill:hover{
+    background:rgba(46,204,113,.12);
+    border-color:var(--green);
+    color:white;
+    transform:translateY(-2px);
+}
+
+/* ==========================
+   RULES
+========================== */
+
+.rule-list{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.rule-card{
+    padding:18px;
+    border-radius:14px;
+    background:#181b21;
+    border-left:5px solid var(--red);
+    border:1px solid var(--border);
+    transition:.25s;
+}
+
+.rule-card:hover{
+    transform:translateX(5px);
+    border-color:var(--red);
+}
+
+.rule-card h4{
+    margin-bottom:8px;
+    color:#ff9d9d;
+    font-size:16px;
+}
+
+.rule-card p{
+    color:var(--muted);
+    font-size:14px;
+}
+
+/* ==========================
+   QUOTE
+========================== */
+
+.quote-card{
+    text-align:center;
+}
+
+.quote-card p{
+    font-size:20px;
+    font-weight:700;
+    color:white;
+    margin-bottom:10px;
+}
+
+.quote-card span{
+    color:var(--muted);
+    font-size:14px;
+    letter-spacing:.08em;
+}
+
+/* ==========================
+   LINKS
+========================== */
+
+a:hover{
+    color:var(--blue);
+}
+
+/* ==========================
+   ANIMATIONS
+========================== */
+
+.hero,
+.day-panel,
+.sidebar-card,
+.footer{
+    animation:fadeUp .6s ease;
+}
+
+@keyframes fadeUp{
+
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media(max-width:1200px){
+
+    .layout{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .sidebar{
+
+        margin-top:20px;
+
+    }
+
+}
+
+@media(max-width:900px){
+
+    h1{
+
+        font-size:42px;
+
+    }
+
+    .routine-card{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .time{
+
+        justify-content:flex-start;
+
+        color:white;
+
+        margin-bottom:5px;
+
+    }
+
+    .card-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .hero{
+
+        padding:60px 20px;
+
+    }
+
+    .hero h1{
+
+        font-size:34px;
+
+    }
+
+    .hero p{
+
+        font-size:16px;
+
+    }
+
+    .day-nav{
+
+        justify-content:flex-start;
+
+        overflow:auto;
+
+        padding:15px;
+
+    }
+
+    .day-btn{
+
+        flex-shrink:0;
+
+    }
+
+    .day-panel{
+
+        padding-left:25px;
+
+    }
+
+    .day-panel::before{
+
+        left:8px;
+
+    }
+
+    .routine-card::before{
+
+        left:-18px;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .layout{
+
+        padding:24px 16px 60px;
+
+    }
+
+    .routine-card{
+
+        padding:18px;
+
+    }
+
+    .section-title{
+
+        font-size:24px;
+
+    }
+
+    .sidebar-card{
+
+        padding:20px;
+
+    }
+
+}
+
+@media(max-width:420px){
+
+    h1{
+
+        font-size:30px;
+
+    }
+
+    .hero-tag{
+
+        font-size:11px;
+
+    }
+
+    .badge{
+
+        font-size:10px;
+
+        padding:6px 10px;
+
+    }
+
+    .habit-pill{
+
+        width:100%;
+        text-align:center;
+    }
+
+}
+
+/* ==========================
+   SELECTION
+========================== */
+
+::selection{
+
+    background:var(--blue);
+
+    color:white;
+
+}
