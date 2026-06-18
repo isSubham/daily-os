@@ -67,35 +67,111 @@
 .routine-card.is-now {
     border-color: var(--blue) !important;
     box-shadow: 0 0 0 1px var(--blue), var(--shadow-glow-blue);
+    background: linear-gradient(135deg, rgba(79,156,255,.06) 0%, var(--surface) 60%) !important;
 }
 
+/* Dimmed past blocks */
+.routine-card.is-past {
+    opacity: 0.45;
+    filter: grayscale(0.35);
+    transition: opacity var(--t-base) var(--ease), filter var(--t-base) var(--ease);
+}
+
+.routine-card.is-past:hover {
+    opacity: 0.75;
+    filter: none;
+}
+
+/* NOW badge */
 .now-badge {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 3px 9px;
+    gap: 6px;
+    padding: 4px 10px;
     border-radius: 999px;
-    background: rgba(79,156,255,.18);
-    border: 1px solid rgba(79,156,255,.3);
+    background: rgba(79,156,255,.15);
+    border: 1px solid rgba(79,156,255,.35);
     color: var(--blue);
     font-size: 10px;
     font-weight: 700;
     letter-spacing: .12em;
     text-transform: uppercase;
-    animation: nowPulse 2s ease-in-out infinite;
+    margin-bottom: 6px;
+    animation: nowGlow 2.5s ease-in-out infinite;
+    flex-shrink: 0;
+    align-self: flex-start;
 }
 
-.now-badge::before {
-    content: "";
-    width: 6px; height: 6px;
+.now-badge__dot {
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--blue);
-    animation: pulse-dot 1.5s ease-in-out infinite;
+    flex-shrink: 0;
+    animation: pulseDot 1.5s ease-in-out infinite;
 }
 
-@keyframes nowPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(79,156,255,.4); }
-    50%       { box-shadow: 0 0 0 4px rgba(79,156,255,0); }
+.now-badge__label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .15em;
+}
+
+.now-badge__remain {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: none;
+    opacity: 0.8;
+    padding-left: 2px;
+    border-left: 1px solid rgba(79,156,255,.3);
+    margin-left: 2px;
+}
+
+@keyframes nowGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(79,156,255,.35); }
+    50%       { box-shadow: 0 0 0 5px rgba(79,156,255,0); }
+}
+
+@keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: .45; transform: scale(.65); }
+}
+
+/* ─── BLOCK PROGRESS RING ────────────────────────────────── */
+
+.progress-ring {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.progress-ring svg {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    transform: rotate(-90deg);
+}
+
+.ring-bg {
+    stroke: rgba(79,156,255,.12);
+    fill: none;
+}
+
+.ring-fill {
+    stroke: var(--blue);
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke-dasharray .6s var(--ease);
+    filter: drop-shadow(0 0 3px rgba(79,156,255,.5));
+}
+
+.ring-pct {
+    font-size: .68rem;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: .04em;
 }
 
 
@@ -305,6 +381,99 @@
     color: #cdb6ff;
     background: rgba(167,139,250,.12);
     border-color: rgba(167,139,250,.2);
+}
+
+
+/* ─── BLOCK CHECKBOX ─────────────────────────────────────── */
+
+.block-check {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--border2);
+    background: var(--surface2);
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: auto;   /* push to far right in .card-header */
+    transition:
+        border-color var(--t-base) var(--ease),
+        background   var(--t-base) var(--ease),
+        color        var(--t-base) var(--ease),
+        transform    var(--t-base) var(--ease),
+        box-shadow   var(--t-base) var(--ease);
+}
+
+.block-check svg {
+    width: 13px; height: 13px;
+    stroke-width: 2.5;
+    opacity: 0;
+    transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+    transform: scale(.7);
+}
+
+.block-check:hover {
+    border-color: var(--green);
+    color: var(--green);
+    transform: scale(1.1);
+    box-shadow: 0 0 0 3px rgba(34,214,120,.15);
+}
+
+.block-check:hover svg {
+    opacity: .6;
+    transform: scale(1);
+}
+
+.block-check.is-done {
+    border-color: var(--green);
+    background: rgba(34,214,120,.18);
+    color: var(--green);
+    box-shadow: 0 0 0 3px rgba(34,214,120,.12);
+}
+
+.block-check.is-done svg {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.block-check.is-done:hover {
+    border-color: var(--red);
+    background: rgba(245,101,101,.12);
+    color: var(--red);
+    box-shadow: 0 0 0 3px rgba(245,101,101,.12);
+}
+
+
+/* ─── DONE CARD STATE ────────────────────────────────────── */
+
+.routine-card.is-done {
+    opacity: .72;
+}
+
+.routine-card.is-done .card-header h3,
+.routine-card.is-done > .card-content > h3 {
+    text-decoration: line-through;
+    text-decoration-color: var(--green);
+    text-decoration-thickness: 2px;
+    opacity: .7;
+}
+
+.routine-card.is-done::before {
+    background: var(--green) !important;
+}
+
+.routine-card.is-done::after {
+    background: var(--green) !important;
+    opacity: .5;
+}
+
+/* Done + Now can coexist — keep NOW border visible */
+.routine-card.is-done.is-now {
+    opacity: 1;
+    border-color: var(--blue) !important;
 }
 
 

@@ -96,7 +96,7 @@
         <h2 class="section-title">Monday · Wednesday · Friday</h2>
 
         <!-- Wake -->
-        <article class="routine-card wake" data-start="07:30 AM" data-end="07:30 AM">
+        <article class="routine-card wake" data-start="07:30 AM" data-end="07:30 AM" data-point="true">
           <div class="time">
             <span class="time__primary">07:30 AM</span>
           </div>
@@ -243,7 +243,7 @@
         </article>
 
         <!-- Sleep -->
-        <article class="routine-card wake" data-start="12:00 AM" data-end="07:30 AM">
+        <article class="routine-card wake" data-start="12:00 AM" data-end="12:00 AM" data-next-day-end="07:30 AM">
           <div class="time">
             <span class="time__primary">12:00 AM</span>
           </div>
@@ -270,7 +270,7 @@
       <section class="day-panel" id="tt" role="tabpanel" aria-labelledby="tab-tt">
         <h2 class="section-title">Tuesday · Thursday</h2>
 
-        <article class="routine-card wake" data-start="07:30 AM">
+        <article class="routine-card wake" data-start="07:30 AM" data-end="07:30 AM" data-point="true">
           <div class="time"><span class="time__primary">07:30 AM</span></div>
           <div class="card-content">
             <div class="card-header">
@@ -362,7 +362,7 @@
           </div>
         </article>
 
-        <article class="routine-card wake" data-start="12:00 AM">
+        <article class="routine-card wake" data-start="12:00 AM" data-end="12:00 AM" data-next-day-end="07:30 AM">
           <div class="time"><span class="time__primary">12 AM</span></div>
           <div class="card-content">
             <div class="card-header">
@@ -383,7 +383,7 @@
       <section class="day-panel" id="sat" role="tabpanel" aria-labelledby="tab-sat">
         <h2 class="section-title">Saturday</h2>
 
-        <article class="routine-card wake" data-start="07:30 AM">
+        <article class="routine-card wake" data-start="07:30 AM" data-end="07:30 AM" data-point="true">
           <div class="time"><span class="time__primary">07:30 AM</span></div>
           <div class="card-content">
             <h3>🌅 Wake Anchor</h3>
@@ -445,7 +445,7 @@
           </div>
         </article>
 
-        <article class="routine-card neutral">
+        <article class="routine-card neutral" data-start="10:30 AM" data-end="11:59 PM">
           <div class="time"><span class="time__primary">Rest of Day</span></div>
           <div class="card-content">
             <h3>🌴 Recovery</h3>
@@ -463,7 +463,7 @@
       <section class="day-panel" id="sun" role="tabpanel" aria-labelledby="tab-sun">
         <h2 class="section-title">Sunday</h2>
 
-        <article class="routine-card wake" data-start="07:30 AM">
+        <article class="routine-card wake" data-start="07:30 AM" data-end="07:30 AM" data-point="true">
           <div class="time"><span class="time__primary">07:30 AM</span></div>
           <div class="card-content">
             <h3>🌅 Wake Anchor</h3>
@@ -489,7 +489,7 @@
           </div>
         </article>
 
-        <article class="routine-card neutral">
+        <article class="routine-card neutral" data-start="10:00 AM" data-end="11:59 PM">
           <div class="time"><span class="time__primary">Rest of Day</span></div>
           <div class="card-content">
             <h3>🌙 Recharge</h3>
@@ -516,9 +516,19 @@
           <div class="progress-bar-fill" style="width: 0%"></div>
         </div>
         <div class="progress-meta">
-          <span class="progress-done">–</span>
+          <span class="progress-done">calculating…</span>
           <span class="progress-stat">0%</span>
         </div>
+      </div>
+
+      <!-- Weekly Progress Heatmap -->
+      <div class="sidebar-card weekly-card">
+        <h2 class="sidebar-title">
+          <span class="sidebar-title__icon">📅</span>
+          This Week
+        </h2>
+        <div class="week-grid" id="week-grid"></div>
+        <p class="week-total" id="week-total">calculating&hellip;</p>
       </div>
 
       <!-- Weekly Study Pattern -->
@@ -669,6 +679,9 @@
   <!-- ═══════════════════════════════════════════════════════
        SCRIPTS
   ════════════════════════════════════════════════════════ -->
+  <!-- Toast anchor (week-reset notification) -->
+  <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
+
   <script type="module" src="app.js"></script>
 
 </body>
