@@ -1,0 +1,19 @@
+# Netlify custom headers
+
+# Service worker — must never be cached so updates reach users immediately
+/sw.js
+  Content-Type: application/javascript; charset=utf-8
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Manifest
+/manifest.json
+  Content-Type: application/manifest+json; charset=utf-8
+  Cache-Control: public, max-age=86400
+
+# Static assets — cache for 1 year (filenames don't change between deploys for this project)
+/css/*
+  Cache-Control: public, max-age=31536000
+/js/*
+  Cache-Control: public, max-age=31536000
+/icons/*
+  Cache-Control: public, max-age=31536000
