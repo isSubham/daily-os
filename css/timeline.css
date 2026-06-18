@@ -82,6 +82,18 @@
     filter: none;
 }
 
+/* Sub-block active state — secondary blocks (e.g., Lunch during Office time) */
+.routine-card.is-sub-now {
+    border-color: var(--orange) !important;
+    box-shadow: 0 0 0 1px var(--orange), 0 0 16px rgba(255,140,66,.12);
+    background: linear-gradient(135deg, rgba(255,140,66,.06) 0%, var(--surface) 60%) !important;
+}
+
+.routine-card.is-sub-now::before {
+    background: var(--orange) !important;
+    animation: pulseDot 1.5s ease-in-out infinite;
+}
+
 /* NOW badge */
 .now-badge {
     display: inline-flex;
@@ -184,6 +196,7 @@
     gap: 18px;
     margin-bottom: 14px;
     padding: 20px 22px;
+    padding-right: 54px;   /* room for the absolute check button */
     border-radius: var(--r-md);
     background: var(--surface);
     border: 1px solid var(--border);
@@ -386,10 +399,15 @@
 
 /* ─── BLOCK CHECKBOX ─────────────────────────────────────── */
 
+/* Positioned absolutely in the top-right corner of the card.
+   Works for all card types regardless of inner layout.        */
 .block-check {
+    position: absolute;
+    top: 16px;
+    right: 16px;
     flex-shrink: 0;
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     border: 2px solid var(--border2);
     background: var(--surface2);
@@ -398,7 +416,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    margin-left: auto;   /* push to far right in .card-header */
+    z-index: 2;
     transition:
         border-color var(--t-base) var(--ease),
         background   var(--t-base) var(--ease),
@@ -480,6 +498,51 @@
 }
 
 
+/* ─── NOTIFICATION TOGGLE BUTTON ─────────────────────────── */
+
+.notif-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1.5px solid var(--border2);
+    background: var(--surface2);
+    color: var(--muted);
+    font-size: .82rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+    transition:
+        border-color var(--t-base) var(--ease),
+        background   var(--t-base) var(--ease),
+        color        var(--t-base) var(--ease),
+        box-shadow   var(--t-base) var(--ease);
+}
+
+.notif-toggle-btn:hover {
+    border-color: var(--blue);
+    color: var(--text);
+}
+
+.notif-toggle-btn.notif-active {
+    border-color: var(--green);
+    background: rgba(34,214,120,.1);
+    color: var(--green);
+    box-shadow: 0 0 0 3px rgba(34,214,120,.1);
+}
+
+.notif-hint {
+    font-size: .72rem;
+    color: var(--muted);
+    opacity: .65;
+    text-align: center;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+
 /* ─── MOBILE RESPONSIVE ──────────────────────────────────── */
 
 @media (max-width: 768px) {
@@ -489,7 +552,7 @@
     .routine-card {
         grid-template-columns: 1fr;
         gap: 10px;
-        padding: 16px 16px 16px 18px;
+        padding: 16px 50px 16px 18px;  /* keep right padding for check btn */
         margin-bottom: 12px;
     }
 
@@ -505,7 +568,7 @@
 @media (max-width: 480px) {
     .day-panel { padding-left: 24px; }
     .day-panel::before { left: 7px; }
-    .routine-card { padding: 14px 14px 14px 16px; margin-bottom: 10px; }
+    .routine-card { padding: 14px 50px 14px 16px; margin-bottom: 10px; }
     .routine-card::before { left: -20px; }
     .section-title { font-size: 1.05rem; margin-bottom: 18px; }
 }

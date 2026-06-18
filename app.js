@@ -3,7 +3,7 @@
     app.js — Main entry point
 ==========================================================*/
 
-import { startClock }           from './js/clock.js';
+import { startClock, getTodayPanel } from './js/clock.js';
 import { initNav }              from './js/nav.js';
 import {
     highlightCurrentBlock,
@@ -14,6 +14,10 @@ import {
     showNewWeekToast,
 } from './js/highlights.js';
 import { checkAndRotateWeek }   from './js/tracker.js';
+import {
+    initNotifications,
+    checkBlockNotifications,
+} from './js/notifications.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -42,9 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // 8. Show new-week toast if applicable
     if (isNewWeek) showNewWeekToast(lastWeek, lastWeekStats);
 
-    // Refresh time-based highlights every minute
+    // 9. Notification reminders (PWA + Web Push)
+    initNotifications();
+
+    // Refresh time-based highlights every minute + check notifications
     setInterval(() => {
         highlightCurrentBlock();
+        checkBlockNotifications(getTodayPanel());
     }, 60_000);
 
     // ── Register Service Worker (PWA) ────────────────────────

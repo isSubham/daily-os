@@ -69,7 +69,7 @@ export function highlightCurrentBlock() {
     const cards  = [...panel.querySelectorAll('.routine-card')];
 
     cards.forEach(c => {
-        c.classList.remove('is-now', 'is-past');
+        c.classList.remove('is-now', 'is-past', 'is-sub-now');
         c.querySelector('.now-badge')?.remove();
         c.querySelector('.progress-ring')?.remove();
     });
@@ -140,14 +140,16 @@ export function highlightCurrentBlock() {
     `;
 
     if (elapsedPct > 0 && elapsedPct < 100) {
-        const c = 2 * Math.PI * 15;
-        const ring = document.createElement('div');
+        const c      = 2 * Math.PI * 15;
+        const filled = (elapsedPct / 100) * c;
+        const gap    = c - filled;
+        const ring   = document.createElement('div');
         ring.className = 'progress-ring';
         ring.innerHTML = `
             <svg viewBox="0 0 36 36" fill="none">
               <circle class="ring-bg"   cx="18" cy="18" r="15" stroke-width="3"/>
               <circle class="ring-fill" cx="18" cy="18" r="15" stroke-width="3"
-                stroke-dasharray="${((elapsedPct / 100) * c).toFixed(2)} ${c.toFixed(2)}"
+                stroke-dasharray="${filled.toFixed(2)} ${gap.toFixed(2)}"
                 stroke-dashoffset="${(c * 0.25).toFixed(2)}"/>
             </svg>
             <span class="ring-pct">${elapsedPct}%</span>`;
@@ -156,6 +158,22 @@ export function highlightCurrentBlock() {
 
     const header = activeCard.querySelector('.card-header') ?? activeCard.querySelector('.card-content');
     if (header) header.prepend(badge);
+
+    // ── Sub-block detection ───────────────────────────────────
+    // Some blocks (e.g., Lunch at 1 PM) sit inside a longer block
+    // (Office Mode 10 AM–7 PM). The primary loop breaks on Office,
+    // so Lunch never gets is-now. Second pass: mark sub-blocks too.
+    blocks.forEach(({ start, end, isPoint, card: c }) => {
+        if (c === activeCard || isPoint || start === null) return;
+        if (c.classList.contains('is-past')) return;
+        const effEnd = end ?? (start + 90);
+        if (nowMin >= start && nowMin < effEnd) {
+            c.classList.remove('is-past');
+            c.classList.add('is-sub-now');
+        } else {
+            c.classList.remove('is-sub-now');
+        }
+    });
 
     requestAnimationFrame(() => {
         const navH   = document.querySelector('.day-nav')?.offsetHeight ?? 58;
@@ -239,15 +257,9 @@ export function initCheckboxes() {
             renderWeekGrid();
         });
 
-        // Inject at the end of card-header, or wrap if no header
-        const header = card.querySelector('.card-header');
-        if (header) {
-            header.appendChild(btn);
-        } else {
-            // Cards without .card-header — place before .card-content children
-            const content = card.querySelector('.card-content');
-            if (content) content.prepend(btn);
-        }
+        // Append directly to card — the button is absolutely positioned
+        // in the top-right corner so it works for all card types uniformly.
+        card.appendChild(btn);
     });
 }
 

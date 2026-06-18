@@ -11,7 +11,7 @@
     Update: bump CACHE_VERSION when deploying new code.
 ==========================================================*/
 
-const CACHE_VERSION  = 'v2';
+const CACHE_VERSION  = 'v3';
 const CACHE_NAME     = `daily-os-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -23,6 +23,7 @@ const PRECACHE_URLS = [
     '/js/nav.js',
     '/js/highlights.js',
     '/js/tracker.js',
+    '/js/notifications.js',
     '/css/base.css',
     '/css/layout.css',
     '/css/timeline.css',
@@ -91,5 +92,48 @@ self.addEventListener('fetch', (event) => {
                 return caches.match('/index.html');
             }
         })
+    );
+});
+
+/* ─── Push event (from Netlify scheduled function) ──── */
+
+// This fires when the server sends a Web Push — even if the
+// PWA is completely closed. The OS wakes the service worker,
+// which shows the notification on the lock screen.
+self.addEventListener('push', (event) => {
+    let data = { title: 'Daily OS', body: '', tag: 'dos-push' };
+    try { data = { ...data, ...event.data?.json() }; } catch {}
+
+    event.waitUntil(
+        self.registration.showNotification(data.title, {
+            body:             data.body,
+            tag:              data.tag,
+            icon:             '/icons/icon-192.png',
+            badge:            '/icons/icon-192.png',
+            vibrate:          [200, 100, 200],
+            requireInteraction: false,
+            silent:           false,
+        })
+    );
+});
+
+/* ─── Notification click ─────────────────────────────── */
+
+// When user taps a block reminder notification, open or focus the PWA.
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+
+    event.waitUntil(
+        self.clients.matchAll({ type: 'window', includeUncontrolled: true })
+            .then(clients => {
+                // If the app is already open, focus it
+                for (const client of clients) {
+                    if ('focus' in client) return client.focus();
+                }
+                // Otherwise open a new window
+                if (self.clients.openWindow) {
+                    return self.clients.openWindow('/');
+                }
+            })
     );
 });

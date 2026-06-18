@@ -1,0 +1,11 @@
+# ═══════════════════════════════════════════════════════
+#  DAILY OS — Netlify Configuration
+# ═══════════════════════════════════════════════════════
+
+[build]
+  publish   = "."
+  command   = "echo 'Static site — no build step'"
+
+[functions]
+  directory     = "netlify/functions"
+  node_bundler  = "esbuild"
