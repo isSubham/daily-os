@@ -11,7 +11,7 @@
     Update: bump CACHE_VERSION when deploying new code.
 ==========================================================*/
 
-const CACHE_VERSION  = 'v8';
+const CACHE_VERSION  = 'v9';
 const CACHE_NAME     = `daily-os-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -28,11 +28,11 @@ const PRECACHE_URLS = [
     '/css/layout.css',
     '/css/timeline.css',
     '/css/sidebar.css',
-    '/icons/icon-192.png',
-    '/icons/icon-512.png',
-    '/icons/badge.png',
-    '/icons/icon-maskable-512.png',
-    '/icons/apple-touch-icon.png',
+    '/icons/icon-192-v2.png',
+    '/icons/icon-512-v2.png',
+    '/icons/badge-v2.png',
+    '/icons/icon-maskable-512-v2.png',
+    '/icons/apple-touch-icon-v2.png',
 ];
 
 /* ─── Install ────────────────────────────────────────────── */
@@ -117,8 +117,8 @@ self.addEventListener('push', (event) => {
         self.registration.showNotification(data.title, {
             body:             data.body,
             tag:              data.tag,
-            icon:             '/icons/icon-192.png',
-            badge:            '/icons/badge.png',
+            icon:             '/icons/icon-192-v2.png',
+            badge:            '/icons/badge-v2.png',
             color:            '#4f9cff',
             vibrate:          [200, 100, 200],
             renotify:         false,
