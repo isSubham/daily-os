@@ -18,20 +18,10 @@ export function toDateStr(d = new Date()) {
 
 /**
  * Returns the SCHEDULE date string.
- * Between 12:00 AM and 7:30 AM we are still on the previous night's
- * schedule, so completions should be saved under yesterday's date.
- * This keeps checkbox keys aligned with the heatmap's date lookup.
+ * Swaps exactly at midnight to the new calendar date.
  */
 export function toScheduleDateStr() {
-    const now  = new Date();
-    const mins = now.getHours() * 60 + now.getMinutes();
-    if (mins < 7 * 60 + 30) {
-        // roll back to yesterday
-        const yesterday = new Date(now);
-        yesterday.setDate(now.getDate() - 1);
-        return toDateStr(yesterday);
-    }
-    return toDateStr(now);
+    return toDateStr(new Date());
 }
 
 export function toISOWeek(d = new Date()) {

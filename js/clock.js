@@ -28,19 +28,14 @@ export function startClock() {
 }
 
 /**
- * Returns the SCHEDULE day: between midnight and 7:30 AM we are still
- * on the "previous night's" schedule (the sleep card spans 12 AM → 7:30 AM).
+ * Returns the SCHEDULE day. Swaps exactly at midnight (12:00 AM)
+ * to the new calendar day.
  *
  * 0=Sun 1=Mon 2=Tue 3=Wed 4=Thu 5=Fri 6=Sat
  */
 export function getScheduleDay() {
     const now  = new Date();
-    const mins = now.getHours() * 60 + now.getMinutes();
-    // Before 7:30 AM → still on yesterday's schedule
-    const day  = mins < 7 * 60 + 30
-        ? (now.getDay() + 6) % 7   // roll back one day (0=Sun wraps to 6=Sat)
-        : now.getDay();
-    return day;
+    return now.getDay();
 }
 
 /**

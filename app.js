@@ -49,12 +49,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 9. Notification reminders + test button
     initNotifications();
-    initTestButton();
+    // initTestButton();
 
     // Refresh time-based highlights every minute + check notifications
     setInterval(() => {
         highlightCurrentBlock();
         checkBlockNotifications(getTodayPanel());
+
+        // Hard reload exactly at midnight to cleanly rotate tabs and lock yesterday's checkboxes
+        const d = new Date();
+        if (d.getHours() === 0 && d.getMinutes() === 0) {
+            window.location.reload();
+        }
     }, 60_000);
 
     // ── Register Service Worker (PWA) ────────────────────────
