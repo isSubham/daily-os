@@ -11,7 +11,7 @@
     Update: bump CACHE_VERSION when deploying new code.
 ==========================================================*/
 
-const CACHE_VERSION  = 'v7';
+const CACHE_VERSION  = 'v8';
 const CACHE_NAME     = `daily-os-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -30,6 +30,7 @@ const PRECACHE_URLS = [
     '/css/sidebar.css',
     '/icons/icon-192.png',
     '/icons/icon-512.png',
+    '/icons/badge.png',
     '/icons/icon-maskable-512.png',
     '/icons/apple-touch-icon.png',
 ];
@@ -117,10 +118,11 @@ self.addEventListener('push', (event) => {
             body:             data.body,
             tag:              data.tag,
             icon:             '/icons/icon-192.png',
-            badge:            '/icons/icon-192.png',
+            badge:            '/icons/badge.png',
+            color:            '#4f9cff',
             vibrate:          [200, 100, 200],
-            requireInteraction: false,
-            silent:           false,
+            renotify:         false,
+            requireInteraction: false
         })
     );
 });
