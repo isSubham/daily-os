@@ -11,13 +11,13 @@
     Update: bump CACHE_VERSION when deploying new code.
 ==========================================================*/
 
-const CACHE_VERSION  = 'v11';
+const CACHE_VERSION  = 'v12';
 const CACHE_NAME     = `daily-os-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
     '/',
     '/index.html',
-    '/app.js',
+    '/app.js?v=2',
     '/manifest.json',
     '/js/clock.js',
     '/js/nav.js',

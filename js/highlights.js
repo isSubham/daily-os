@@ -45,7 +45,8 @@ function getCardTimes(card) {
             isPoint:     card.dataset.point === 'true',
         };
     }
-    const raw   = card.querySelector('.time__primary')?.textContent?.trim() ?? '';
+    const rawEl = card.querySelector('.time__primary');
+    const raw   = rawEl && rawEl.textContent ? rawEl.textContent.trim() : '';
     const parts = raw.split(/[-–]/).map(s => s.trim());
     return {
         start:      parseTime(parts[0], false),
@@ -70,8 +71,10 @@ export function highlightCurrentBlock() {
 
     cards.forEach(c => {
         c.classList.remove('is-now', 'is-past', 'is-sub-now');
-        c.querySelector('.now-badge')?.remove();
-        c.querySelector('.progress-ring')?.remove();
+        const nb = c.querySelector('.now-badge');
+        if (nb) nb.remove();
+        const pr = c.querySelector('.progress-ring');
+        if (pr) pr.remove();
     });
 
     const blocks = cards.map((card, idx) => ({ ...getCardTimes(card), card, idx }));
@@ -98,7 +101,7 @@ export function highlightCurrentBlock() {
             continue;
         }
 
-        const effEnd = end ?? blocks[i + 1]?.start ?? (start + 90);
+        const effEnd = end !== null ? end : (blocks[i + 1] ? blocks[i + 1].start : (start + 90));
         const isNow  = effEnd <= start
             ? (nowMin >= start || nowMin < effEnd)
             : (nowMin >= start && nowMin < effEnd);
@@ -109,7 +112,7 @@ export function highlightCurrentBlock() {
     // Mark past blocks
     blocks.forEach(({ start, end, nextDayEnd, isPoint, card }) => {
         if (card === activeCard || start === null || isPoint) return;
-        const effEnd = nextDayEnd ?? end ?? (start + 90);
+        const effEnd = (nextDayEnd !== null) ? nextDayEnd : (end !== null ? end : (start + 90));
         if (effEnd <= nowMin) card.classList.add('is-past');
     });
 
@@ -153,10 +156,11 @@ export function highlightCurrentBlock() {
                 stroke-dashoffset="${(c * 0.25).toFixed(2)}"/>
             </svg>
             <span class="ring-pct">${elapsedPct}%</span>`;
-        activeCard.querySelector('.time')?.appendChild(ring);
+        const t = activeCard.querySelector('.time');
+        if (t) t.appendChild(ring);
     }
 
-    const header = activeCard.querySelector('.card-header') ?? activeCard.querySelector('.card-content');
+    const header = activeCard.querySelector('.card-header') || activeCard.querySelector('.card-content');
     if (header) header.prepend(badge);
 
     // ── Sub-block detection ───────────────────────────────────
@@ -166,7 +170,7 @@ export function highlightCurrentBlock() {
     blocks.forEach(({ start, end, isPoint, card: c }) => {
         if (c === activeCard || isPoint || start === null) return;
         if (c.classList.contains('is-past')) return;
-        const effEnd = end ?? (start + 90);
+        const effEnd = end !== null ? end : (start + 90);
         if (nowMin >= start && nowMin < effEnd) {
             c.classList.remove('is-past');
             c.classList.add('is-sub-now');
@@ -176,7 +180,8 @@ export function highlightCurrentBlock() {
     });
 
     requestAnimationFrame(() => {
-        const navH   = document.querySelector('.day-nav')?.offsetHeight ?? 58;
+        const navEl  = document.querySelector('.day-nav');
+        const navH   = navEl ? navEl.offsetHeight : 58;
         const rect   = activeCard.getBoundingClientRect();
         const absTop = rect.top + window.scrollY;
         if (rect.top < navH + 10 || rect.bottom > window.innerHeight * 0.75) {

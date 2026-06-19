@@ -44,7 +44,8 @@ export function initNav() {
             if (window.innerWidth < 768) {
                 const target = document.querySelector('.layout');
                 if (target) {
-                    const navH = document.querySelector('.day-nav')?.offsetHeight ?? 58;
+                    const navEl = document.querySelector('.day-nav');
+                    const navH = navEl ? navEl.offsetHeight : 58;
                     window.scrollTo({ top: target.offsetTop - navH, behavior: 'smooth' });
                 }
             }

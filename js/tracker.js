@@ -129,8 +129,8 @@ export function checkAndRotateWeek() {
         return { isNewWeek: false, lastWeek: null, lastWeekStats: null };
     }
 
-    const lastWeek      = meta.currentWeek ?? null;
-    const lastWeekStats = meta.lastWeekStats ?? null;
+    const lastWeek      = meta.currentWeek !== undefined ? meta.currentWeek : null;
+    const lastWeekStats = meta.lastWeekStats !== undefined ? meta.lastWeekStats : null;
 
     // Prune keys older than 28 days
     const cutoff = new Date();

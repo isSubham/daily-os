@@ -35,11 +35,11 @@ function parseTimeToMins(str) {
 }
 
 function getCardTitle(card) {
-    return (
-        card.querySelector('.card-header h3')?.textContent?.trim() ??
-        card.querySelector('.card-content h3')?.textContent?.trim() ??
-        'Block'
-    );
+    const h3Header = card.querySelector('.card-header h3');
+    const h3Content = card.querySelector('.card-content h3');
+    const title = (h3Header && h3Header.textContent) ? h3Header.textContent.trim() :
+                  ((h3Content && h3Content.textContent) ? h3Content.textContent.trim() : 'Unnamed block');
+    return title;
 }
 
 function getCardTimes(card) {
