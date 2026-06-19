@@ -63,6 +63,15 @@ document.addEventListener('DOMContentLoaded', () => {
             .register('/sw.js', { scope: '/' })
             .then(reg => console.log('[SW] Registered, scope:', reg.scope))
             .catch(err => console.warn('[SW] Registration failed:', err));
+
+        // Auto-reload when a new SW takes over
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!refreshing) {
+                refreshing = true;
+                window.location.reload();
+            }
+        });
     }
 
 });

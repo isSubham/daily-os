@@ -11,7 +11,7 @@
     Update: bump CACHE_VERSION when deploying new code.
 ==========================================================*/
 
-const CACHE_VERSION  = 'v5';
+const CACHE_VERSION  = 'v6';
 const CACHE_NAME     = `daily-os-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -39,7 +39,15 @@ const PRECACHE_URLS = [
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(PRECACHE_URLS))
+            .then(cache => {
+                // Force bypass HTTP cache to rescue devices stuck on the old 1-year cache policy
+                return Promise.all(PRECACHE_URLS.map(url => {
+                    return fetch(url, { cache: 'no-store' }).then(res => {
+                        if (!res.ok) throw new Error(`Fetch failed: ${url}`);
+                        return cache.put(url, res);
+                    });
+                }));
+            })
             .then(() => self.skipWaiting())   // activate immediately
     );
 });

@@ -10,10 +10,10 @@
   Content-Type: application/manifest+json; charset=utf-8
   Cache-Control: public, max-age=86400
 
-# Static assets — cache for 1 year (filenames don't change between deploys for this project)
-/css/*
-  Cache-Control: public, max-age=31536000
-/js/*
-  Cache-Control: public, max-age=31536000
+# Icons can be cached long-term
 /icons/*
   Cache-Control: public, max-age=31536000
+
+# Everything else (HTML, JS, CSS) will use Netlify's default ETag caching.
+# We removed the 1-year max-age because we don't use file hashing (like app.123.js),
+# which caused mobile devices to aggressively cache old JS/CSS code even when the Service Worker updated.
