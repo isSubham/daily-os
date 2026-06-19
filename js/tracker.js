@@ -16,6 +16,24 @@ export function toDateStr(d = new Date()) {
     ].join('-');
 }
 
+/**
+ * Returns the SCHEDULE date string.
+ * Between 12:00 AM and 7:30 AM we are still on the previous night's
+ * schedule, so completions should be saved under yesterday's date.
+ * This keeps checkbox keys aligned with the heatmap's date lookup.
+ */
+export function toScheduleDateStr() {
+    const now  = new Date();
+    const mins = now.getHours() * 60 + now.getMinutes();
+    if (mins < 7 * 60 + 30) {
+        // roll back to yesterday
+        const yesterday = new Date(now);
+        yesterday.setDate(now.getDate() - 1);
+        return toDateStr(yesterday);
+    }
+    return toDateStr(now);
+}
+
 export function toISOWeek(d = new Date()) {
     const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
     dt.setUTCDate(dt.getUTCDate() + 4 - (dt.getUTCDay() || 7));
@@ -47,7 +65,8 @@ export function toggleDone(dateStr, panelId, cardIdx) {
 
 /**
  * Returns { done, total } for a date + panel.
- * Excludes data-point="true" cards (Wake / Sleep anchors).
+ * Excludes data-point="true" AND data-next-day-end cards
+ * (Wake anchors + Sleep anchors — both are non-negotiable).
  */
 export function getPanelStats(dateStr, panelId) {
     const panel = document.getElementById(panelId);
@@ -55,6 +74,7 @@ export function getPanelStats(dateStr, panelId) {
     let done = 0, total = 0;
     panel.querySelectorAll('.routine-card').forEach((card, idx) => {
         if (card.dataset.point === 'true') return;
+        if (card.dataset.nextDayEnd)       return; // Sleep anchor
         total++;
         if (isDone(dateStr, panelId, idx)) done++;
     });
@@ -71,15 +91,19 @@ const WEEK_LABELS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
 /**
  * Returns 7-element array for current ISO week (Mon → Sun).
- * Each: { dayLabel, panelId, dateStr, done, total, isToday, isFuture }
+ * Uses toScheduleDateStr() for "today" so the heatmap correctly
+ * marks the schedule day even when it's past midnight.
  */
 export function getWeekData() {
-    const today      = new Date();
-    const todayStr   = toDateStr(today);
-    const dow        = today.getDay(); // 0=Sun
+    const now         = new Date();
+    const scheduleDateStr = toScheduleDateStr();  // ← schedule-aware "today"
+    const calDateStr  = toDateStr(now);           // real calendar date
+
+    // Monday of the current ISO week (based on calendar date)
+    const dow        = now.getDay();
     const mondayDiff = dow === 0 ? -6 : 1 - dow;
-    const monday     = new Date(today);
-    monday.setDate(today.getDate() + mondayDiff);
+    const monday     = new Date(now);
+    monday.setDate(now.getDate() + mondayDiff);
     monday.setHours(0, 0, 0, 0);
 
     return WEEK_LABELS.map((label, i) => {
@@ -87,8 +111,11 @@ export function getWeekData() {
         d.setDate(monday.getDate() + i);
         const dateStr  = toDateStr(d);
         const panelId  = DAY_TO_PANEL[label];
-        const isToday  = dateStr === todayStr;
-        const isFuture = dateStr > todayStr;
+
+        // "today" in schedule context (handles after-midnight correctly)
+        const isToday  = dateStr === scheduleDateStr;
+        // future = strictly after the schedule date
+        const isFuture = dateStr > scheduleDateStr;
         const stats    = isFuture ? { done: 0, total: 0 } : getPanelStats(dateStr, panelId);
         return { dayLabel: label, panelId, dateStr, ...stats, isToday, isFuture };
     });
@@ -103,10 +130,6 @@ export function getWeekTotal() {
 
 /* ─── Week rotation ──────────────────────────────────────── */
 
-/**
- * Detects ISO week change. Prunes keys > 28 days old.
- * Returns { isNewWeek, lastWeek, lastWeekStats }
- */
 export function checkAndRotateWeek() {
     const currentWeek = toISOWeek();
     let meta = {};
@@ -130,19 +153,10 @@ export function checkAndRotateWeek() {
             if (dateStr < cutoffStr) localStorage.removeItem(k);
         });
 
-    localStorage.setItem(META, JSON.stringify({
-        currentWeek,
-        lastWeek,
-        lastWeekStats, // carry last week's archived stats for toast
-    }));
-
+    localStorage.setItem(META, JSON.stringify({ currentWeek, lastWeek, lastWeekStats }));
     return { isNewWeek: !!lastWeek, lastWeek, lastWeekStats };
 }
 
-/**
- * Archives this week's total so the toast can show it next Monday.
- * Call this whenever stats update (updateProgress, checkbox toggle).
- */
 export function archiveCurrentWeekStats() {
     const total = getWeekTotal();
     let meta = {};

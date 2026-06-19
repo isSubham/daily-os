@@ -225,15 +225,15 @@ export function initNotifications() {
     const webPushAvailable = ('serviceWorker' in navigator) && ('PushManager' in window);
 
     function updateUI(enabled) {
-        btn.textContent = enabled ? '🔔 Reminders On' : '🔕 Enable Reminders';
+        btn.textContent = enabled ? '✅ Reminders On' : '⏰ Enable Reminders';
         btn.classList.toggle('notif-active', enabled);
 
         if (hint) {
             hint.textContent = enabled
                 ? webPushAvailable
-                    ? '✅ Active — you\'ll be notified even when the app is closed'
-                    : '✅ Active — notifies while app is open (Web Push not available on this browser)'
-                : 'Get notified 5 min before each block starts · works best as installed PWA';
+                    ? 'Active — notified even when app is closed'
+                    : 'Active — notifies while app is open'
+                : 'Get notified 5 min before each block starts';
         }
     }
 

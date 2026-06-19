@@ -7,7 +7,7 @@ import { getTodayPanel, getScheduleDay } from './clock.js';
 import {
     isDone, toggleDone, getPanelStats,
     getWeekData, getWeekTotal, archiveCurrentWeekStats,
-    toDateStr,
+    toDateStr, toScheduleDateStr,
 } from './tracker.js';
 
 /* ─────────────────────────────────────────────────────────────
@@ -207,9 +207,9 @@ export function updateProgress() {
     const countEl = document.querySelector('.progress-done');
     if (!fill) return;
 
-    const todayStr = toDateStr();
-    const panelId  = getTodayPanel();
-    const { done, total } = getPanelStats(todayStr, panelId);
+    const dateStr = toScheduleDateStr();   // ← schedule-aware date
+    const panelId = getTodayPanel();
+    const { done, total } = getPanelStats(dateStr, panelId);
 
     const pct = total === 0 ? 0 : Math.round((done / total) * 100);
 
@@ -225,41 +225,45 @@ export function updateProgress() {
    ──────────────────────────────────────────────────────────── */
 
 export function initCheckboxes() {
-    const todayStr = toDateStr();
-    const panelId  = getTodayPanel();
-    const panel    = document.getElementById(panelId);
+    const dateStr = toScheduleDateStr();
+    const panelId = getTodayPanel();
+    const panel   = document.getElementById(panelId);
     if (!panel) return;
 
     panel.querySelectorAll('.routine-card').forEach((card, idx) => {
-        if (card.dataset.point === 'true') return; // skip wake/sleep anchors
+        if (card.dataset.point === 'true') return;  // wake anchor
+        if (card.dataset.nextDayEnd)       return;  // sleep anchor
 
         const btn = document.createElement('button');
-        btn.className   = 'block-check';
-        btn.title       = 'Mark block as done';
+        btn.className = 'block-check';
+        btn.title     = 'Mark block as done';
         btn.setAttribute('aria-label', 'Mark block as done');
-        btn.innerHTML   = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor"
+        btn.innerHTML = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor"
             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="2.5 8.5 6.5 12.5 13.5 3.5"/>
         </svg>`;
 
-        // Restore persisted state
-        if (isDone(todayStr, panelId, idx)) {
+        if (isDone(dateStr, panelId, idx)) {
             btn.classList.add('is-done');
             card.classList.add('is-done');
         }
 
         btn.addEventListener('click', e => {
             e.stopPropagation();
-            const next = toggleDone(todayStr, panelId, idx);
+            const next = toggleDone(dateStr, panelId, idx);
             btn.classList.toggle('is-done', next);
             card.classList.toggle('is-done', next);
             updateProgress();
             renderWeekGrid();
         });
 
-        // Append directly to card — the button is absolutely positioned
-        // in the top-right corner so it works for all card types uniformly.
-        card.appendChild(btn);
+        const header = card.querySelector('.card-header');
+        if (header) {
+            header.appendChild(btn);
+        } else {
+            const content = card.querySelector('.card-content');
+            if (content) content.appendChild(btn);
+        }
     });
 }
 
