@@ -7,46 +7,63 @@
     Immediately sends a Web Push notification to the stored
     subscription. Used to verify the full push pipeline
     (VAPID keys → Netlify Blobs → device) without waiting
-    for the scheduled function to fire.
+    for the scheduled function.
 
-    No request body needed. Returns JSON { ok, message }.
+    Returns JSON { ok: bool, message: string }
 ==========================================================*/
 
-import webpush    from 'web-push';
+import webpush      from 'web-push';
 import { getStore } from '@netlify/blobs';
 
+const JSON_HEADERS = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+};
+
+function json(body, status = 200) {
+    return new Response(JSON.stringify(body), { status, headers: JSON_HEADERS });
+}
+
 export default async (req) => {
+    // Handle CORS preflight
+    if (req.method === 'OPTIONS') {
+        return new Response(null, { status: 204, headers: JSON_HEADERS });
+    }
+
     if (req.method !== 'POST') {
-        return new Response('Method not allowed', { status: 405 });
+        return json({ ok: false, message: 'Method not allowed.' }, 405);
     }
 
     // Guard: VAPID keys must be configured
     if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
-        return new Response(
-            JSON.stringify({ ok: false, message: 'VAPID keys not configured in env vars.' }),
-            { status: 500, headers: { 'Content-Type': 'application/json' } }
-        );
+        return json({
+            ok: false,
+            message: 'VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY not set in Netlify env vars.',
+        }, 500);
     }
 
-    // Load stored subscription
-    const store = getStore('dos-push');
-    const raw   = await store.get('subscription').catch(() => null);
+    // Load stored subscription from Netlify Blobs
+    let raw;
+    try {
+        const store = getStore('dos-push');
+        raw = await store.get('subscription');
+    } catch (err) {
+        return json({ ok: false, message: `Blob store error: ${err.message}` }, 500);
+    }
 
     if (!raw) {
-        return new Response(
-            JSON.stringify({ ok: false, message: 'No subscription found. Enable Reminders first.' }),
-            { status: 404, headers: { 'Content-Type': 'application/json' } }
-        );
+        return json({
+            ok: false,
+            message: 'No subscription found. Tap "Enable Reminders" in the app first.',
+        }, 404);
     }
 
     let subscription;
     try {
         subscription = JSON.parse(raw);
     } catch {
-        return new Response(
-            JSON.stringify({ ok: false, message: 'Subscription data corrupted.' }),
-            { status: 500, headers: { 'Content-Type': 'application/json' } }
-        );
+        return json({ ok: false, message: 'Subscription data is corrupted.' }, 500);
     }
 
     webpush.setVapidDetails(
@@ -55,40 +72,37 @@ export default async (req) => {
         process.env.VAPID_PRIVATE_KEY,
     );
 
-    const now = new Date();
+    const now     = new Date();
+    const timeIST = now.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata' });
     const payload = JSON.stringify({
         title: '⏰ Daily OS — Test Push',
-        body:  `Push pipeline working! Sent at ${now.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata' })} IST`,
+        body:  `Pipeline ✅ — sent at ${timeIST} IST`,
         tag:   'dos-test',
     });
 
     try {
         await webpush.sendNotification(subscription, payload);
-        console.log('[test-push] ✅ Test notification sent successfully');
+        console.log('[test-push] ✅ Sent successfully at', timeIST);
+        return json({ ok: true, message: `Test push sent! Check your device. (${timeIST} IST)` });
 
-        return new Response(
-            JSON.stringify({ ok: true, message: 'Test push sent! Check your device.' }),
-            { status: 200, headers: { 'Content-Type': 'application/json' } }
-        );
     } catch (err) {
-        console.error('[test-push] Failed:', err.message);
+        console.error('[test-push] Failed:', err.statusCode, err.message);
 
-        if (err.statusCode === 410) {
-            // Subscription expired
-            await store.delete('subscription').catch(() => {});
-            return new Response(
-                JSON.stringify({ ok: false, message: 'Subscription expired (410). Please re-enable Reminders.' }),
-                { status: 410, headers: { 'Content-Type': 'application/json' } }
-            );
+        if (err.statusCode === 410 || err.statusCode === 404) {
+            // Subscription expired or invalid — delete it
+            try {
+                const store = getStore('dos-push');
+                await store.delete('subscription');
+            } catch {}
+            return json({
+                ok: false,
+                message: 'Subscription expired (re-enable Reminders to re-subscribe).',
+            }, 410);
         }
 
-        return new Response(
-            JSON.stringify({ ok: false, message: `Push failed: ${err.message}` }),
-            { status: 500, headers: { 'Content-Type': 'application/json' } }
-        );
+        return json({ ok: false, message: `Push failed: ${err.message}` }, 500);
     }
 };
 
-export const config = {
-    path: '/send-test-push',
-};
+// NOTE: No config.path here — function is accessed at the default
+// /.netlify/functions/send-test-push (determined by filename)

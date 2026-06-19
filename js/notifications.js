@@ -307,6 +307,14 @@ async function sendTestPush(statusEl) {
     setStatus('⏳ Pinging server push…');
 
     // ── 2. Server-side push (via Netlify function) ───────
+    // Skip on localhost — the function doesn't run there
+    const isLocal = ['localhost', '127.0.0.1'].includes(location.hostname);
+    if (isLocal) {
+        setStatus('✅ Local notification worked! (Server push only runs on Netlify)');
+        setTimeout(() => { if (statusEl) statusEl.textContent = ''; }, 8000);
+        return;
+    }
+
     try {
         const res  = await fetch('/.netlify/functions/send-test-push', { method: 'POST' });
         const data = await res.json();
