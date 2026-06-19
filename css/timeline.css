@@ -542,6 +542,53 @@
     line-height: 1.4;
 }
 
+.notif-test-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1.5px dashed var(--border2);
+    background: transparent;
+    color: var(--muted);
+    font-size: .78rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 8px;
+    transition:
+        border-color var(--t-base) var(--ease),
+        color        var(--t-base) var(--ease),
+        background   var(--t-base) var(--ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .notif-test-btn:hover {
+        border-color: var(--blue);
+        color: var(--blue);
+        background: rgba(79,156,255,.06);
+    }
+}
+
+.notif-test-btn:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.notif-test-status {
+    font-size: .72rem;
+    text-align: center;
+    margin-top: 7px;
+    min-height: 1.2em;
+    line-height: 1.4;
+    font-weight: 500;
+    transition: color var(--t-base);
+}
+
+.notif-test-status.is-ok    { color: var(--green); }
+.notif-test-status.is-error { color: #f6ad55; }   /* amber — not full red */
+
 
 /* ─── MOBILE RESPONSIVE ──────────────────────────────────── */
 

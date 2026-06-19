@@ -17,6 +17,7 @@ import { checkAndRotateWeek }   from './js/tracker.js';
 import {
     initNotifications,
     checkBlockNotifications,
+    initTestButton,
 } from './js/notifications.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -46,8 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 8. Show new-week toast if applicable
     if (isNewWeek) showNewWeekToast(lastWeek, lastWeekStats);
 
-    // 9. Notification reminders (PWA + Web Push)
+    // 9. Notification reminders + test button
     initNotifications();
+    initTestButton();
 
     // Refresh time-based highlights every minute + check notifications
     setInterval(() => {

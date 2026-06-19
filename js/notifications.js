@@ -281,3 +281,73 @@ export function initNotifications() {
         );
     });
 }
+/* ─── Test push button ────────────────────────────────── */
+
+/**
+ * Sends an immediate test notification two ways:
+ * 1. Local (via SW.showNotification) — confirms browser/SW works
+ * 2. Server-side (via Netlify function) — confirms full push pipeline
+ */
+async function sendTestPush(statusEl) {
+    const setStatus = (msg, isError = false) => {
+        if (!statusEl) return;
+        statusEl.textContent = msg;
+        statusEl.className   = 'notif-test-status ' + (isError ? 'is-error' : 'is-ok');
+    };
+
+    setStatus('⏳ Sending local notification…');
+
+    // ── 1. Local immediate notification ─────────────────
+    await fireNotification(
+        '⏰ Daily OS — Local Test',
+        'If you see this, browser notifications are working!',
+        'dos-local-test',
+    );
+
+    setStatus('⏳ Pinging server push…');
+
+    // ── 2. Server-side push (via Netlify function) ───────
+    try {
+        const res  = await fetch('/.netlify/functions/send-test-push', { method: 'POST' });
+        const data = await res.json();
+
+        if (data.ok) {
+            setStatus('✅ ' + data.message);
+        } else {
+            setStatus('⚠️ ' + data.message, true);
+        }
+    } catch (err) {
+        setStatus('❌ Server unreachable — check Netlify deploy.', true);
+    }
+
+    // Auto-clear after 8s
+    setTimeout(() => {
+        if (statusEl) statusEl.textContent = '';
+    }, 8000);
+}
+
+export function initTestButton() {
+    const btn      = document.getElementById('notif-test-btn');
+    const statusEl = document.getElementById('notif-test-status');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+        if (!isNotificationsEnabled()) {
+            if (statusEl) {
+                statusEl.textContent = '⚠️ Enable Reminders first.';
+                statusEl.className   = 'notif-test-status is-error';
+            }
+            return;
+        }
+        if (Notification.permission !== 'granted') {
+            if (statusEl) {
+                statusEl.textContent = '⚠️ Notification permission not granted.';
+                statusEl.className   = 'notif-test-status is-error';
+            }
+            return;
+        }
+        btn.disabled = true;
+        await sendTestPush(statusEl);
+        btn.disabled = false;
+    });
+}
