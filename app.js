@@ -2,6 +2,12 @@
     DAILY OPERATING SYSTEM
     app.js — Main entry point
 ==========================================================*/
+window.onerror = function(msg, src, lineno, colno, error) {
+    alert("JS Error: " + msg + " at line " + lineno);
+};
+window.addEventListener('unhandledrejection', function(event) {
+    alert("Async Error: " + event.reason);
+});
 
 import { startClock, getTodayPanel } from './js/clock.js';
 import { initNav }              from './js/nav.js';
