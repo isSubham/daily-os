@@ -40,12 +40,16 @@ export function initNav() {
         });
 
         // On mobile only: smooth scroll to content top
-        if (window.innerWidth < 768) {
-            const target = document.querySelector('.layout');
-            if (target) {
-                const navH = document.querySelector('.day-nav')?.offsetHeight ?? 58;
-                window.scrollTo({ top: target.offsetTop - navH, behavior: 'smooth' });
+        try {
+            if (window.innerWidth < 768) {
+                const target = document.querySelector('.layout');
+                if (target) {
+                    const navH = document.querySelector('.day-nav')?.offsetHeight ?? 58;
+                    window.scrollTo({ top: target.offsetTop - navH, behavior: 'smooth' });
+                }
             }
+        } catch (e) {
+            console.error('Mobile scroll error:', e);
         }
     }
 
