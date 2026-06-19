@@ -142,7 +142,9 @@ export default async () => {
         const { start, end, name, emoji, longBlock } = block;
 
         // ── 5 minutes before block starts ──────────────
-        if (nowMin === start - 5) {
+        // Serverless cron can drift by a minute. Check a 3-min window.
+        // Web Push `tag` prevents duplicate alerts on the device.
+        if (nowMin >= start - 6 && nowMin <= start - 4) {
             await sendPush(
                 subscription,
                 `${emoji} Coming up in 5 min`,
@@ -152,7 +154,7 @@ export default async () => {
         }
 
         // ── Block starts NOW ────────────────────────────
-        if (nowMin === start && !longBlock) {
+        if (nowMin >= start - 1 && nowMin <= start + 1 && !longBlock) {
             // Skip 9-hour office "longBlock" start — too noisy at 10AM
             await sendPush(
                 subscription,
@@ -163,7 +165,7 @@ export default async () => {
         }
 
         // ── 5 minutes before block ends ─────────────────
-        if (end && nowMin === end - 5) {
+        if (end && nowMin >= end - 6 && nowMin <= end - 4) {
             await sendPush(
                 subscription,
                 `⏱ Wrapping up in 5 min`,
