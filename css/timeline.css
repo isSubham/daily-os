@@ -500,20 +500,32 @@
 
 /* ─── NOTIFICATION TOGGLE BUTTON ─────────────────────────── */
 
+.notif-toggle-btn,
+.notif-test-btn {
+    /* Reset browser-default button appearance on Android/iOS */
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
 .notif-toggle-btn {
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
-    padding: 9px 16px;
+    padding: 10px 16px;
     border-radius: 999px;
     border: 1.5px solid var(--border2);
     background: var(--surface2);
     color: var(--muted);
-    font-size: .82rem;
+    font-size: .84rem;
     font-weight: 600;
     cursor: pointer;
     width: 100%;
-    justify-content: center;
+    text-align: center;
+    line-height: 1.2;
     transition:
         border-color var(--t-base) var(--ease),
         background   var(--t-base) var(--ease),
@@ -521,9 +533,11 @@
         box-shadow   var(--t-base) var(--ease);
 }
 
-.notif-toggle-btn:hover {
-    border-color: var(--blue);
-    color: var(--text);
+@media (hover: hover) and (pointer: fine) {
+    .notif-toggle-btn:hover {
+        border-color: var(--blue);
+        color: var(--text);
+    }
 }
 
 .notif-toggle-btn.notif-active {
@@ -543,11 +557,11 @@
 }
 
 .notif-test-btn {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 7px 14px;
+    padding: 8px 14px;
     border-radius: 999px;
     border: 1.5px dashed var(--border2);
     background: transparent;
@@ -557,6 +571,8 @@
     cursor: pointer;
     width: 100%;
     margin-top: 8px;
+    text-align: center;
+    line-height: 1.2;
     transition:
         border-color var(--t-base) var(--ease),
         color        var(--t-base) var(--ease),
@@ -587,7 +603,7 @@
 }
 
 .notif-test-status.is-ok    { color: var(--green); }
-.notif-test-status.is-error { color: #f6ad55; }   /* amber — not full red */
+.notif-test-status.is-error { color: #f6ad55; }   /* amber */
 
 
 /* ─── MOBILE RESPONSIVE ──────────────────────────────────── */

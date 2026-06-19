@@ -11,7 +11,7 @@
     Update: bump CACHE_VERSION when deploying new code.
 ==========================================================*/
 
-const CACHE_VERSION  = 'v4';
+const CACHE_VERSION  = 'v5';
 const CACHE_NAME     = `daily-os-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
