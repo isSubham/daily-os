@@ -113,30 +113,42 @@ async function sendPush(subscription, title, body, tag) {
 /* ─── Main scheduled handler ──────────────────────────── */
 
 export default async () => {
+    let logs = [];
+    const log = (msg) => logs.push(`[${new Date().toISOString()}] ${msg}`);
+    log('Scheduler triggered');
+
+    const store = getStore('dos-push');
+
     // Guard: ensure VAPID keys are configured
     if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
-        console.warn('[push] VAPID keys not set. Skipping.');
+        log('ERR: VAPID keys not set in env vars');
+        await store.set('scheduler_log', logs.join('\n'));
         return;
     }
 
     // Load stored subscription
-    const store = getStore('dos-push');
-    const raw   = await store.get('subscription');
+    const raw = await store.get('subscription');
     if (!raw) {
-        // No subscription yet — user hasn't enabled reminders
+        log('SKIP: No subscription found in blobs');
+        await store.set('scheduler_log', logs.join('\n'));
         return;
     }
 
     let subscription;
     try {
         subscription = JSON.parse(raw);
+        log('Loaded subscription');
     } catch {
-        console.error('[push] Corrupted subscription JSON');
+        log('ERR: Corrupted subscription JSON');
+        await store.set('scheduler_log', logs.join('\n'));
         return;
     }
 
-    const { day, nowMin } = getNowIST();
+    const { day, nowMin, h, m } = getNowIST();
+    log(`Time IST: Day ${day}, ${h}:${m} (nowMin: ${nowMin})`);
+
     const blocks = SCHEDULE[day] ?? MWF;
+    let pushSent = 0;
 
     for (const block of blocks) {
         const { start, end, name, emoji, longBlock } = block;
@@ -145,35 +157,44 @@ export default async () => {
         // Serverless cron can drift by a minute. Check a 3-min window.
         // Web Push `tag` prevents duplicate alerts on the device.
         if (nowMin >= start - 6 && nowMin <= start - 4) {
+            log(`MATCH: start-5mins for ${name}`);
             await sendPush(
                 subscription,
                 `${emoji} Coming up in 5 min`,
                 `${name} starts at ${fmtMin(start)}`,
                 `dos-pre-${day}-${start}`,
             );
+            pushSent++;
         }
 
         // ── Block starts NOW ────────────────────────────
         if (nowMin >= start - 1 && nowMin <= start + 1 && !longBlock) {
             // Skip 9-hour office "longBlock" start — too noisy at 10AM
+            log(`MATCH: start-now for ${name}`);
             await sendPush(
                 subscription,
                 `${emoji} Starting now`,
                 name,
                 `dos-start-${day}-${start}`,
             );
+            pushSent++;
         }
 
         // ── 5 minutes before block ends ─────────────────
         if (end && nowMin >= end - 6 && nowMin <= end - 4) {
+            log(`MATCH: end-5mins for ${name}`);
             await sendPush(
                 subscription,
                 `⏱ Wrapping up in 5 min`,
                 `${name} ends at ${fmtMin(end)}`,
                 `dos-end-${day}-${end}`,
             );
+            pushSent++;
         }
     }
+
+    log(`Finished. Pushes sent: ${pushSent}`);
+    await store.set('scheduler_log', logs.join('\n'));
 };
 
 /* ─── Cron: every minute ──────────────────────────────── */
